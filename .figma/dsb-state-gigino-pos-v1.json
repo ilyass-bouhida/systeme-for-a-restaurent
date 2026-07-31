@@ -1,0 +1,42 @@
+{
+  "runId": "gigino-pos-v1",
+  "fileKey": "dIchgoTH8rmP8pRKgy0e0q",
+  "fileUrl": "https://www.figma.com/design/dIchgoTH8rmP8pRKgy0e0q",
+  "productScreensFileKey": "gzTjvjHCndH5qPQ3a2hnqh",
+  "productScreensFileUrl": "https://www.figma.com/design/gzTjvjHCndH5qPQ3a2hnqh",
+  "capturePrototype": ".figma/prototype/index.html",
+  "scope": {
+    "direction": "Warm Italian operations",
+    "platforms": ["desktop", "tablet", "pos-touch"],
+    "screens": [
+      "Cashier / Tables",
+      "Cashier / Active Order",
+      "Worker / Dashboard",
+      "Admin / Analytics"
+    ],
+    "components": [
+      "Button",
+      "Status Badge",
+      "Table Card",
+      "Product Card",
+      "Stat Card"
+    ]
+  },
+  "figma": {
+    "collections": {
+      "primitives": "VariableCollectionId:2:3",
+      "color": "VariableCollectionId:2:4",
+      "size": "VariableCollectionId:2:5"
+    },
+    "counts": {
+      "variables": 72,
+      "semanticAliases": 31,
+      "textStyles": 8,
+      "effectStyles": 2
+    },
+    "pages": {},
+    "components": {},
+    "screens": {}
+  },
+  "connectionNote": "Figma variables and styles were created successfully. Subsequent canvas, capture, metadata, and asset placement calls returned INVALID_ARGUMENT for both authenticated files; the verified capture prototype is preserved locally for retry."
+}

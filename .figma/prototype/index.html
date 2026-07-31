@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gigino POS — Figma Capture Source</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="canvas">
+      <section class="board" aria-labelledby="system-title">
+        <div class="board-kicker">01 · FOUNDATIONS & COMPONENTS</div>
+        <div class="system-cover">
+          <div class="brand-mark">G</div>
+          <div>
+            <p class="eyebrow light">RESTAURANT OPERATIONS</p>
+            <h1 id="system-title">Gigino</h1>
+            <p>A calm, fast and touch-friendly restaurant POS.</p>
+          </div>
+          <span class="version">UI source of truth · v1.0</span>
+        </div>
+
+        <div class="foundations-grid">
+          <article class="foundation-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">COLOR</p>
+                <h2>Warm Italian operations</h2>
+              </div>
+              <span class="code-label">31 semantic tokens</span>
+            </div>
+            <div class="swatches">
+              <div class="swatch"><i class="swatch-cream"></i><span>App</span><small>#FBFAF7</small></div>
+              <div class="swatch"><i class="swatch-ink"></i><span>Ink</span><small>#161310</small></div>
+              <div class="swatch"><i class="swatch-tomato"></i><span>Action</span><small>#D8472F</small></div>
+              <div class="swatch"><i class="swatch-olive"></i><span>Profit</span><small>#268A4B</small></div>
+              <div class="swatch"><i class="swatch-amber"></i><span>Occupied</span><small>#E5A11A</small></div>
+              <div class="swatch"><i class="swatch-blue"></i><span>Info</span><small>#2563EB</small></div>
+            </div>
+          </article>
+
+          <article class="foundation-card type-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">TYPE</p>
+                <h2>Inter · confident and compact</h2>
+              </div>
+              <span class="code-label">8 text styles</span>
+            </div>
+            <div class="type-row"><span>Display</span><strong>40 / 44</strong><b>Pay with confidence</b></div>
+            <div class="type-row small"><span>Heading 2</span><strong>22 / 28</strong><b>Table 07</b></div>
+            <div class="type-row body"><span>Body</span><strong>16 / 24</strong><b>Simple labels and short instructions.</b></div>
+          </article>
+
+          <article class="foundation-card component-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">TOUCH COMPONENTS</p>
+                <h2>Minimum 48px targets</h2>
+              </div>
+              <span class="code-label">10 / 16 / 24px radii</span>
+            </div>
+            <div class="component-demo">
+              <button class="btn primary">Primary action</button>
+              <button class="btn secondary">Secondary</button>
+              <button class="btn danger">Hold table</button>
+              <span class="status available">● Available</span>
+              <span class="status occupied">● Occupied</span>
+              <span class="status held">● On hold</span>
+            </div>
+          </article>
+
+          <article class="foundation-card state-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">SYSTEM STATES</p>
+                <h2>Predictable feedback everywhere</h2>
+              </div>
+            </div>
+            <div class="state-grid">
+              <div class="mini-state"><span class="spinner"></span><b>Loading</b><small>Fetching live tables…</small></div>
+              <div class="mini-state"><span class="state-icon">◇</span><b>Empty</b><small>No paid orders yet.</small></div>
+              <div class="mini-state error"><span class="state-icon">!</span><b>Couldn’t load data</b><small>Retry without losing work.</small></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="board" aria-labelledby="cashier-tables-title">
+        <div class="board-kicker">10 · CASHIER / TABLES · DESKTOP 1440 × 960</div>
+        <div class="app-frame desktop tables-screen">
+          <aside class="sidebar">
+            <div class="brand"><span>G</span><div><b>Gigino</b><small>Restaurant POS</small></div></div>
+            <nav>
+              <a class="active" href="#"><i>▦</i>Tables</a>
+              <a href="#"><i>≡</i>Orders</a>
+              <a href="#"><i>◌</i>My account</a>
+            </nav>
+            <div class="sidebar-help">
+              <b>Shift is live</b>
+              <small>Orders update instantly.</small>
+              <span><i></i> Connected</span>
+            </div>
+            <div class="profile"><span>Y</span><div><b>Youssef Amrani</b><small>Cashier</small></div><button>⋯</button></div>
+          </aside>
+          <div class="app-main">
+            <header class="topbar">
+              <div>
+                <p class="eyebrow">THURSDAY · DINNER SHIFT</p>
+                <h2 id="cashier-tables-title">Choose a table</h2>
+              </div>
+              <div class="top-actions">
+                <span class="live-pill"><i></i> Live</span>
+                <button class="icon-button">?</button>
+                <div class="avatar">Y</div>
+              </div>
+            </header>
+            <div class="screen-content">
+              <div class="summary-strip">
+                <div><span class="metric-icon green">✓</span><p><small>Available</small><b>8 tables</b></p></div>
+                <div><span class="metric-icon amber">●</span><p><small>Occupied</small><b>5 tables</b></p></div>
+                <div><span class="metric-icon red">Ⅱ</span><p><small>On hold</small><b>2 tables</b></p></div>
+                <div class="shift-sales"><p><small>My sales today</small><b>3 842,00 MAD</b></p><span>24 orders</span></div>
+              </div>
+              <div class="toolbar">
+                <div class="segmented"><button class="selected">All tables <span>15</span></button><button>Terrace <span>5</span></button><button>Dining room <span>8</span></button><button>Bar <span>2</span></button></div>
+                <label class="search"><span>⌕</span><input aria-label="Search tables" placeholder="Search table" /></label>
+              </div>
+              <div class="table-grid">
+                <button class="table-card available-card">
+                  <div><span class="table-icon">⌑</span><span class="status available">● Available</span></div>
+                  <h3>Table 01</h3><p>4 seats · Dining room</p><footer><span>Ready for guests</span><b>Open →</b></footer>
+                </button>
+                <button class="table-card occupied-card">
+                  <div><span class="table-icon amber">⌑</span><span class="status occupied">● Occupied</span></div>
+                  <h3>Table 02</h3><p>2 guests · Open 38 min</p><footer><span>Youssef</span><b>248,00 MAD</b></footer>
+                </button>
+                <button class="table-card held-card">
+                  <div><span class="table-icon inverse">Ⅱ</span><span class="status held-inverse">● On hold</span></div>
+                  <h3>Table 03</h3><p>4 guests · Held 6 min</p><footer><span>Resume order</span><b>186,00 MAD</b></footer>
+                </button>
+                <button class="table-card available-card">
+                  <div><span class="table-icon">⌑</span><span class="status available">● Available</span></div>
+                  <h3>Table 04</h3><p>6 seats · Terrace</p><footer><span>Ready for guests</span><b>Open →</b></footer>
+                </button>
+                <button class="table-card occupied-card">
+                  <div><span class="table-icon amber">⌑</span><span class="status occupied">● Occupied</span></div>
+                  <h3>Table 05</h3><p>5 guests · Open 24 min</p><footer><span>Salma</span><b>462,00 MAD</b></footer>
+                </button>
+                <button class="table-card available-card">
+                  <div><span class="table-icon">⌑</span><span class="status available">● Available</span></div>
+                  <h3>Table 06</h3><p>2 seats · Bar</p><footer><span>Ready for guests</span><b>Open →</b></footer>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="board" aria-labelledby="cashier-order-title">
+        <div class="board-kicker">11 · CASHIER / ACTIVE ORDER · DESKTOP 1440 × 1024</div>
+        <div class="app-frame desktop order-screen">
+          <aside class="rail">
+            <div class="rail-logo">G</div>
+            <button>▦<small>Tables</small></button>
+            <button class="active">＋<small>Order</small></button>
+            <button>≡<small>Orders</small></button>
+            <div class="rail-spacer"></div>
+            <button>◌<small>Account</small></button>
+            <div class="avatar">Y</div>
+          </aside>
+          <div class="menu-panel">
+            <header class="order-header">
+              <button class="back-button">←</button>
+              <div><p class="eyebrow">ACTIVE ORDER · #1048</p><h2 id="cashier-order-title">Table 07 <span>4 guests</span></h2></div>
+              <span class="order-time">◷ 00:18:42</span>
+            </header>
+            <div class="menu-tools">
+              <label class="search wide"><span>⌕</span><input aria-label="Search menu" placeholder="Search the menu…" /></label>
+              <button class="filter-button">☷ Filters</button>
+            </div>
+            <div class="category-tabs">
+              <button class="selected">Popular</button><button>Pizza</button><button>Pasta</button><button>Mains</button><button>Desserts</button><button>Drinks</button>
+            </div>
+            <div class="product-grid">
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Pizza</span><h3>Margherita</h3><p>Tomato, mozzarella and basil</p><footer><b>75,00 MAD</b><i>＋</i></footer></div></button>
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Pizza</span><h3>Diavola</h3><p>Spicy salami and mozzarella</p><footer><b>89,00 MAD</b><i>＋</i></footer></div></button>
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Pasta</span><h3>Tagliatelle al pesto</h3><p>Basil pesto and parmesan</p><footer><b>85,00 MAD</b><i>＋</i></footer></div></button>
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Mains</span><h3>Gigino burger</h3><p>Provolone and house sauce</p><footer><b>78,00 MAD</b><i>＋</i></footer></div></button>
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Dessert</span><h3>Tiramisu</h3><p>Mascarpone and coffee</p><footer><b>42,00 MAD</b><i>＋</i></footer></div></button>
+              <button class="product-card"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="" /><div><span>Drinks</span><h3>Espresso</h3><p>Freshly ground coffee</p><footer><b>18,00 MAD</b><i>＋</i></footer></div></button>
+            </div>
+          </div>
+          <aside class="order-summary">
+            <header>
+              <div><p class="eyebrow">CURRENT ORDER</p><h2>Table 07</h2></div>
+              <span class="item-count">4 items</span>
+            </header>
+            <div class="order-lines">
+              <article><div><b>Margherita</b><small>75,00 MAD each</small></div><strong>150,00 MAD</strong><div class="quantity"><button>−</button><span>2</span><button>＋</button></div></article>
+              <article><div><b>Tagliatelle al pesto</b><small>85,00 MAD each</small></div><strong>85,00 MAD</strong><div class="quantity"><button>−</button><span>1</span><button>＋</button></div></article>
+              <article><div><b>Fresh orange juice</b><small>28,00 MAD each</small></div><strong>28,00 MAD</strong><div class="quantity"><button>−</button><span>1</span><button>＋</button></div></article>
+            </div>
+            <div class="payment-zone">
+              <div class="total-row"><span>Total</span><strong>263,00 MAD</strong></div>
+              <label class="amount-field"><span>Amount received</span><div><input value="300.00" aria-label="Amount received" /><b>MAD</b></div></label>
+              <div class="change-row"><span>Change to return</span><strong>37,00 MAD</strong></div>
+              <div class="payment-actions"><button class="btn secondary">Ⅱ Hold</button><button class="btn success">▣ Cash</button></div>
+              <button class="btn primary full">▤ Pay by card</button>
+              <p class="payment-note">Payment completes the table and updates admin revenue instantly.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="board" aria-labelledby="worker-title">
+        <div class="board-kicker">15 · WORKER / DASHBOARD · TABLET 1024 × 768</div>
+        <div class="app-frame tablet worker-screen">
+          <header class="tablet-header">
+            <div class="brand"><span>G</span><div><b>Gigino</b><small>Worker space</small></div></div>
+            <nav><button class="active">Overview</button><button>Tables</button><button>Orders</button></nav>
+            <div class="avatar">Y</div>
+          </header>
+          <div class="tablet-content">
+            <div class="worker-welcome">
+              <div><p class="eyebrow">DINNER SHIFT · LIVE</p><h2 id="worker-title">Good evening, Youssef</h2><p>Everything you need for your shift, in one place.</p></div>
+              <button class="btn primary">Open a table</button>
+            </div>
+            <div class="worker-stats">
+              <article><span class="metric-icon tomato">▤</span><small>My sales today</small><strong>3 842,00 MAD</strong><p><b>↑ 12%</b> from yesterday</p></article>
+              <article><span class="metric-icon green">✓</span><small>Paid orders</small><strong>24</strong><p>Avg. 160,08 MAD</p></article>
+              <article><span class="metric-icon blue">◷</span><small>Open tables</small><strong>5</strong><p>2 need attention</p></article>
+            </div>
+            <div class="worker-grid">
+              <article class="worker-panel">
+                <div class="panel-heading"><div><p class="eyebrow">MY ACTIVE TABLES</p><h3>Continue serving</h3></div><button>View all →</button></div>
+                <div class="compact-table-list">
+                  <div><span class="table-chip occupied-chip">T02</span><p><b>Table 02</b><small>2 guests · 38 min</small></p><strong>248,00 MAD</strong><button>Open</button></div>
+                  <div><span class="table-chip held-chip">T03</span><p><b>Table 03</b><small>On hold · 6 min</small></p><strong>186,00 MAD</strong><button>Resume</button></div>
+                  <div><span class="table-chip occupied-chip">T09</span><p><b>Table 09</b><small>4 guests · 12 min</small></p><strong>320,00 MAD</strong><button>Open</button></div>
+                </div>
+              </article>
+              <article class="worker-panel account-panel">
+                <div class="panel-heading"><div><p class="eyebrow">MY ACCOUNT</p><h3>Profile & security</h3></div></div>
+                <div class="large-profile"><span>Y</span><div><b>Youssef Amrani</b><small>Cashier · Evening shift</small></div></div>
+                <button>Update my details <span>→</span></button>
+                <button>Change password <span>→</span></button>
+                <button>View my order history <span>→</span></button>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="board" aria-labelledby="admin-title">
+        <div class="board-kicker">20 · ADMIN / ANALYTICS · DESKTOP 1440 × 1080</div>
+        <div class="app-frame desktop admin-screen">
+          <aside class="sidebar admin-sidebar">
+            <div class="brand"><span>G</span><div><b>Gigino</b><small>Admin console</small></div></div>
+            <nav>
+              <a class="active" href="#"><i>⌁</i>Overview</a><a href="#"><i>▤</i>Menu</a><a href="#"><i>▦</i>Tables</a><a href="#"><i>♙</i>Workers</a><a href="#"><i>▥</i>Reports</a>
+            </nav>
+            <div class="nav-divider"></div>
+            <a class="cashier-link" href="#">↗ Open cashier</a>
+            <div class="profile"><span>A</span><div><b>Admin Gigino</b><small>Administrator</small></div><button>⋯</button></div>
+          </aside>
+          <div class="app-main">
+            <header class="topbar">
+              <div><p class="eyebrow">LIVE BUSINESS VIEW</p><h2 id="admin-title">Good evening, Admin</h2></div>
+              <div class="top-actions">
+                <span class="live-pill"><i></i> Live updates</span>
+                <label class="date-select">Today⌄</label>
+                <div class="avatar">A</div>
+              </div>
+            </header>
+            <div class="admin-content">
+              <div class="admin-stats">
+                <article><header><small>Revenue</small><span class="metric-icon tomato">▤</span></header><strong>12 684,00 MAD</strong><p><b>↑ 8.4%</b> vs. yesterday</p></article>
+                <article><header><small>Gross profit</small><span class="metric-icon green">↗</span></header><strong>8 116,00 MAD</strong><p><b>64.0% margin</b></p></article>
+                <article><header><small>Product cost</small><span class="metric-icon amber">▣</span></header><strong>4 568,00 MAD</strong><p>Cost of goods sold</p></article>
+                <article><header><small>Visitors</small><span class="metric-icon blue">♙</span></header><strong>98</strong><p>129,43 MAD per guest</p></article>
+                <article><header><small>Average ticket</small><span class="metric-icon neutral">▥</span></header><strong>181,20 MAD</strong><p>70 paid tables</p></article>
+                <article><header><small>Items sold</small><span class="metric-icon violet">◇</span></header><strong>264</strong><p>Product units completed</p></article>
+              </div>
+              <div class="analytics-grid">
+                <article class="chart-card revenue-card">
+                  <div class="panel-heading"><div><p class="eyebrow">REVENUE & PROFIT</p><h3>Today by hour</h3></div><div class="legend"><span><i class="revenue-dot"></i>Revenue</span><span><i class="profit-dot"></i>Profit</span></div></div>
+                  <div class="chart-value"><strong>12 684,00 MAD</strong><span>Live</span></div>
+                  <svg viewBox="0 0 760 230" role="img" aria-label="Revenue and profit chart">
+                    <defs><linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8472f" stop-opacity=".2"/><stop offset="1" stop-color="#d8472f" stop-opacity="0"/></linearGradient></defs>
+                    <g class="grid-lines"><line x1="20" y1="35" x2="740" y2="35"/><line x1="20" y1="95" x2="740" y2="95"/><line x1="20" y1="155" x2="740" y2="155"/><line x1="20" y1="215" x2="740" y2="215"/></g>
+                    <path class="area" d="M20 190 C90 170,95 178,160 145 S240 130,300 125 S390 75,450 94 S550 45,610 67 S690 35,740 45 L740 220 L20 220Z"/>
+                    <path class="line revenue-line" d="M20 190 C90 170,95 178,160 145 S240 130,300 125 S390 75,450 94 S550 45,610 67 S690 35,740 45"/>
+                    <path class="line profit-line" d="M20 205 C90 190,110 193,160 170 S240 160,300 155 S390 120,450 130 S550 92,610 105 S690 82,740 86"/>
+                  </svg>
+                  <div class="axis"><span>12 PM</span><span>2 PM</span><span>4 PM</span><span>6 PM</span><span>8 PM</span><span>10 PM</span></div>
+                </article>
+                <article class="chart-card live-orders">
+                  <div class="panel-heading"><div><p class="eyebrow">LIVE ACTIVITY</p><h3>Latest payments</h3></div><button>View orders</button></div>
+                  <div class="activity-list">
+                    <div><span class="activity-icon">✓</span><p><b>Table 07 paid</b><small>Card · Youssef · Just now</small></p><strong>263,00 MAD</strong></div>
+                    <div><span class="activity-icon">✓</span><p><b>Table 12 paid</b><small>Cash · Salma · 4 min</small></p><strong>412,00 MAD</strong></div>
+                    <div><span class="activity-icon">✓</span><p><b>Table 04 paid</b><small>Card · Nabil · 9 min</small></p><strong>186,00 MAD</strong></div>
+                    <div><span class="activity-icon">✓</span><p><b>Table 08 paid</b><small>Cash · Youssef · 14 min</small></p><strong>328,00 MAD</strong></div>
+                  </div>
+                </article>
+                <article class="chart-card product-performance">
+                  <div class="panel-heading"><div><p class="eyebrow">PRODUCT PERFORMANCE</p><h3>Best sellers and margin</h3></div><button>Manage menu</button></div>
+                  <table>
+                    <thead><tr><th>Product</th><th>Sold</th><th>Revenue</th><th>Cost</th><th>Profit</th></tr></thead>
+                    <tbody>
+                      <tr><td><span class="food-thumb pizza"></span><b>Margherita</b></td><td>38</td><td>2 850 MAD</td><td>988 MAD</td><td><strong>1 862 MAD</strong><small>65%</small></td></tr>
+                      <tr><td><span class="food-thumb pasta"></span><b>Carbonara</b></td><td>31</td><td>2 852 MAD</td><td>961 MAD</td><td><strong>1 891 MAD</strong><small>66%</small></td></tr>
+                      <tr><td><span class="food-thumb burger"></span><b>Gigino burger</b></td><td>27</td><td>2 106 MAD</td><td>810 MAD</td><td><strong>1 296 MAD</strong><small>62%</small></td></tr>
+                    </tbody>
+                  </table>
+                </article>
+                <article class="chart-card team-card">
+                  <div class="panel-heading"><div><p class="eyebrow">TEAM TODAY</p><h3>Worker sales</h3></div><button>View team</button></div>
+                  <div class="team-list"><div><span>Y</span><p><b>Youssef</b><small>24 orders</small></p><strong>3 842 MAD</strong></div><div><span>S</span><p><b>Salma</b><small>21 orders</small></p><strong>3 516 MAD</strong></div><div><span>N</span><p><b>Nabil</b><small>18 orders</small></p><strong>2 988 MAD</strong></div></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
