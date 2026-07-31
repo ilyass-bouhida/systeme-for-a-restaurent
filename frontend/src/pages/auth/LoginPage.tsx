@@ -18,6 +18,8 @@ const schema = z.object({
 
 type LoginValues = z.infer<typeof schema>;
 
+const isDevelopment = import.meta.env.DEV;
+
 export function LoginPage() {
   const token = useAuthStore((state) => state.token);
   const setSession = useAuthStore((state) => state.setSession);
@@ -31,8 +33,8 @@ export function LoginPage() {
   } = useForm<LoginValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "cashier@gigino.local",
-      password: "GiginoDemo!2026",
+      email: isDevelopment ? "cashier@gigino.local" : "",
+      password: isDevelopment ? "GiginoDemo!2026" : "",
     },
   });
 
@@ -170,30 +172,32 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-7 rounded-2xl border border-stone-200 bg-white p-4">
-            <p className="text-xs font-bold tracking-wide text-stone-500 uppercase">
-              Local demo accounts
-            </p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => fillDemoCredentials("cashier")}
-              >
-                Cashier
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => fillDemoCredentials("admin")}
-              >
-                Admin
-              </Button>
+          {isDevelopment ? (
+            <div className="mt-7 rounded-2xl border border-stone-200 bg-white p-4">
+              <p className="text-xs font-bold tracking-wide text-stone-500 uppercase">
+                Local demo accounts
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => fillDemoCredentials("cashier")}
+                >
+                  Cashier
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => fillDemoCredentials("admin")}
+                >
+                  Admin
+                </Button>
+              </div>
+              <p className="mt-3 text-xs leading-5 text-stone-400">
+                Change the seeded password before any production use.
+              </p>
             </div>
-            <p className="mt-3 text-xs leading-5 text-stone-400">
-              Change the seeded password before any production use.
-            </p>
-          </div>
+          ) : null}
         </div>
       </section>
     </main>
