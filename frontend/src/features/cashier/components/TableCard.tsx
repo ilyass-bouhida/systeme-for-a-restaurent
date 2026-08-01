@@ -24,13 +24,13 @@ export function TableCard({
   return (
     <button
       className={cn(
-        "group min-h-56 touch-manipulation rounded-[var(--gigino-radius-lg)] border bg-white p-5 text-left shadow-[var(--gigino-shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--gigino-shadow-floating)] focus-visible:ring-4 focus-visible:outline-none disabled:opacity-50",
+        "group relative min-h-44 touch-manipulation overflow-hidden rounded-[16px] border p-4 text-left shadow-[var(--gigino-shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--gigino-shadow-floating)] focus-visible:ring-4 focus-visible:outline-none disabled:opacity-50",
         table.status === "available" &&
-          "border-gigino-line focus-visible:ring-emerald-200",
+          "border-emerald-200 bg-[#eaf5ee] focus-visible:ring-emerald-200",
         table.status === "occupied" &&
-          "border-amber-200 focus-visible:ring-amber-200",
+          "border-amber-200 bg-[#fff3dc] focus-visible:ring-amber-200",
         table.status === "hold" &&
-          "border-gigino-tomato bg-gigino-tomato text-white focus-visible:ring-red-200",
+          "border-gigino-held bg-gigino-held text-white focus-visible:ring-red-200",
       )}
       onClick={onSelect}
       disabled={disabled}
@@ -39,7 +39,7 @@ export function TableCard({
       <div className="flex items-start justify-between gap-3">
         <div
           className={cn(
-            "grid size-11 place-items-center rounded-[14px] bg-emerald-50 text-emerald-800",
+            "grid size-10 place-items-center rounded-[12px] bg-white/70 text-emerald-800",
             table.status === "occupied" && "bg-amber-50 text-amber-800",
             table.status === "hold" && "bg-white/15 text-white",
           )}
@@ -60,7 +60,9 @@ export function TableCard({
         </Badge>
       </div>
 
-      <h3 className="mt-7 text-xl font-black tracking-tight">{table.label}</h3>
+      <h3 className="mt-5 text-lg font-extrabold tracking-tight">
+        {table.label}
+      </h3>
       <div
         className={cn(
           "text-gigino-muted mt-2 flex items-center gap-1.5 text-sm",
@@ -74,7 +76,7 @@ export function TableCard({
       {table.active_order && (
         <div
           className={cn(
-            "border-gigino-line mt-5 flex items-center justify-between border-t pt-4 text-sm",
+            "border-gigino-line mt-4 flex items-center justify-between border-t pt-3 text-sm",
             table.status === "hold" && "border-white/20",
           )}
         >
@@ -86,7 +88,7 @@ export function TableCard({
         </div>
       )}
       {!table.active_order && (
-        <div className="border-gigino-line text-gigino-muted mt-5 flex items-center justify-between border-t pt-4 text-xs font-bold">
+        <div className="border-gigino-line text-gigino-muted mt-4 flex items-center justify-between border-t pt-3 text-xs font-bold">
           <span>Ready for guests</span>
           <span className="text-gigino-ink flex items-center gap-1">
             Open

@@ -14,7 +14,7 @@ const variants: Record<ButtonVariant, string> = {
   primary:
     "bg-gigino-tomato text-white shadow-sm hover:bg-gigino-tomato-dark focus-visible:ring-red-200",
   secondary:
-    "border border-gigino-line bg-white text-gigino-ink hover:bg-gigino-subtle focus-visible:ring-stone-200",
+    "border border-gigino-line bg-white text-gigino-ink hover:border-gigino-line hover:bg-gigino-subtle focus-visible:ring-stone-200",
   danger:
     "bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100 focus-visible:ring-red-200",
   ghost:
@@ -24,7 +24,7 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "min-h-10 gap-1.5 rounded-[var(--gigino-radius-sm)] px-3 text-sm",
+  sm: "min-h-10 gap-1.5 rounded-[10px] px-3 text-sm",
   md: "min-h-12 gap-2 rounded-[var(--gigino-radius-md)] px-4 text-sm",
   lg: "min-h-14 gap-2.5 rounded-[var(--gigino-radius-md)] px-5 text-base",
 };
@@ -42,7 +42,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        "inline-flex touch-manipulation items-center justify-center font-bold transition duration-150 focus-visible:ring-4 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-45",
+        "inline-flex touch-manipulation items-center justify-center font-extrabold transition duration-150 focus-visible:ring-4 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-45",
         variants[variant],
         sizes[size],
         className,

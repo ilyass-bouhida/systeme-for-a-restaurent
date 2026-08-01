@@ -27,7 +27,7 @@ describe("TableCard", () => {
     const table = screen.getByRole("button", {
       name: "Table 4, On hold",
     });
-    expect(table).toHaveClass("bg-gigino-tomato");
+    expect(table).toHaveClass("bg-gigino-held");
     expect(screen.getByText("On hold")).toBeVisible();
   });
 });

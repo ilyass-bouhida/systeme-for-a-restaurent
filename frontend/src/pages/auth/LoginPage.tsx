@@ -34,7 +34,7 @@ export function LoginPage() {
     resolver: zodResolver(schema),
     defaultValues: {
       email: isDevelopment ? "cashier@gigino.local" : "",
-      password: isDevelopment ? "GiginoDemo!2026" : "",
+      password: isDevelopment ? "12345678" : "",
     },
   });
 
@@ -68,29 +68,30 @@ export function LoginPage() {
       "email",
       role === "admin" ? "admin@gigino.local" : "cashier@gigino.local",
     );
-    setValue("password", "GiginoDemo!2026");
+    setValue("password", "12345678");
   };
 
   return (
-    <main className="grid min-h-screen bg-[#f5f2ec] lg:grid-cols-[1.05fr_0.95fr]">
-      <section className="relative hidden overflow-hidden bg-stone-950 p-10 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
-        <div className="absolute -top-32 -right-28 size-[28rem] rounded-full bg-amber-400/15 blur-3xl" />
-        <div className="absolute bottom-24 -left-24 size-80 rounded-full bg-emerald-400/10 blur-3xl" />
+    <main className="bg-gigino-app grid min-h-screen lg:grid-cols-[1.08fr_0.92fr]">
+      <section className="bg-gigino-ink relative hidden overflow-hidden p-10 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
+        <div className="bg-gigino-tomato absolute inset-y-0 right-0 w-1" />
+        <div className="absolute top-12 right-12 size-40 rounded-full border border-white/10" />
+        <div className="absolute top-24 right-24 size-72 rounded-full border border-white/5" />
 
         <div className="relative flex items-center gap-3">
-          <div className="grid size-12 place-items-center rounded-2xl bg-white text-stone-950">
+          <div className="bg-gigino-tomato grid size-12 place-items-center rounded-[14px] text-white">
             <ChefHat className="size-7" />
           </div>
           <div>
             <p className="text-2xl font-black tracking-tight">Gigino</p>
-            <p className="text-sm text-stone-400">Restaurant POS</p>
+            <p className="text-sm text-stone-400">Restaurant command center</p>
           </div>
         </div>
 
         <div className="relative max-w-xl">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-stone-300">
-            <Sparkles className="size-4 text-amber-300" />
-            Built for fast, calm service
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-stone-300">
+            <Sparkles className="text-gigino-tomato size-4" />
+            The dinner shift, perfectly clear
           </div>
           <h1 className="text-5xl leading-[1.05] font-black tracking-[-0.04em] xl:text-6xl">
             Every table.
@@ -106,15 +107,15 @@ export function LoginPage() {
         </div>
 
         <div className="relative grid grid-cols-2 gap-4">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <Clock3 className="mb-3 size-5 text-amber-300" />
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <Clock3 className="mb-3 size-5 text-amber-400" />
             <p className="font-bold">Fast at the counter</p>
             <p className="mt-1 text-sm text-stone-400">
               Large, touch-ready controls
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-            <ShieldCheck className="mb-3 size-5 text-emerald-300" />
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <ShieldCheck className="mb-3 size-5 text-emerald-400" />
             <p className="font-bold">Secure by design</p>
             <p className="mt-1 text-sm text-stone-400">
               Role-based staff access
@@ -123,19 +124,19 @@ export function LoginPage() {
         </div>
       </section>
 
-      <section className="grid place-items-center p-5 sm:p-10">
-        <div className="w-full max-w-md">
+      <section className="grid place-items-center p-5 sm:p-10 xl:p-16">
+        <div className="border-gigino-line w-full max-w-[440px] rounded-[24px] border bg-white p-6 shadow-[var(--gigino-shadow-floating)] sm:p-8 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <div className="grid size-11 place-items-center rounded-2xl bg-stone-950 text-white">
+            <div className="bg-gigino-tomato grid size-11 place-items-center rounded-[13px] text-white">
               <ChefHat className="size-6" />
             </div>
-            <span className="text-2xl font-black">Gigino</span>
+            <span className="text-2xl font-extrabold">Gigino</span>
           </div>
 
           <p className="mb-2 text-sm font-bold tracking-[0.16em] text-stone-500 uppercase">
             Staff access
           </p>
-          <h2 className="text-4xl font-black tracking-[-0.035em] text-stone-950">
+          <h2 className="text-gigino-ink text-4xl font-extrabold tracking-[-0.035em]">
             Welcome back
           </h2>
           <p className="mt-3 text-stone-500">

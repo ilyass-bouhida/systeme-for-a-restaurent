@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { TableCard } from "@/features/cashier/components/TableCard";
@@ -10,6 +9,7 @@ import {
 import type { TableStatus } from "@/types/api";
 import { cn } from "@/utils/cn";
 import { formatMoney } from "@/utils/money";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   CircleCheck,
   CircleDollarSign,
@@ -28,6 +28,7 @@ const filters: Array<{ value: "all" | TableStatus; label: string }> = [
 ];
 
 export function TablesPage() {
+  const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const tables = useTables();
   const stats = useWorkerStats();
@@ -62,23 +63,33 @@ export function TablesPage() {
   if (tables.isLoading)
     return <LoadingScreen label="Opening the dining room…" />;
 
+  const hour = new Date().getHours();
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const shift = hour < 16 ? "Lunch shift" : "Dinner shift";
+  const dayLabel = new Intl.DateTimeFormat("en", {
+    weekday: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date());
+
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div>
-          <div className="mb-2 flex items-center gap-2">
-            <Badge tone="green">Thursday · Dinner shift</Badge>
-          </div>
-          <h1 className="text-3xl font-black tracking-[-0.035em] sm:text-4xl">
-            Choose a table
+          <p className="text-gigino-tomato mb-2 text-xs font-extrabold tracking-[0.14em] uppercase">
+            {shift} · {dayLabel}
+          </p>
+          <h1 className="text-3xl font-extrabold tracking-[-0.035em] sm:text-4xl">
+            {greeting}, {user?.name.split(" ")[0] ?? "team"}
           </h1>
           <p className="text-gigino-muted mt-2">
-            Start a new order or continue a table already in service.
+            Choose a table to start an order or continue service.
           </p>
         </div>
       </div>
 
-      <div className="border-gigino-line mt-7 grid overflow-hidden rounded-[20px] border bg-white shadow-[var(--gigino-shadow-card)] sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {[
           [
             "Available",
@@ -101,7 +112,7 @@ export function TablesPage() {
         ].map(([label, value, Icon, tone]) => (
           <div
             key={label as string}
-            className="border-gigino-line flex min-h-24 items-center gap-3 border-b p-4 sm:border-r xl:border-b-0"
+            className="border-gigino-line flex min-h-24 items-center gap-3 rounded-[16px] border bg-white p-4 shadow-[var(--gigino-shadow-card)]"
           >
             <span
               className={cn(
@@ -119,7 +130,7 @@ export function TablesPage() {
             </div>
           </div>
         ))}
-        <div className="flex min-h-24 items-center gap-3 p-4">
+        <div className="border-gigino-line flex min-h-24 items-center gap-3 rounded-[16px] border bg-white p-4 shadow-[var(--gigino-shadow-card)]">
           <span className="bg-gigino-subtle text-gigino-ink grid size-11 place-items-center rounded-[14px]">
             <CircleDollarSign className="size-5" />
           </span>
@@ -137,14 +148,14 @@ export function TablesPage() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="border-gigino-line mt-6 flex flex-col gap-3 rounded-[16px] border bg-white p-2.5 shadow-[var(--gigino-shadow-card)] sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-1 overflow-x-auto pb-1 sm:pb-0">
           {filters.map((item) => (
             <button
               key={item.value}
               onClick={() => setFilter(item.value)}
               className={cn(
-                "text-gigino-muted min-h-11 shrink-0 rounded-[13px] border border-transparent bg-transparent px-4 text-sm font-bold transition",
+                "text-gigino-muted min-h-11 shrink-0 rounded-[11px] border border-transparent bg-transparent px-4 text-sm font-bold transition",
                 filter === item.value &&
                   "border-gigino-ink bg-gigino-ink text-white",
               )}
@@ -159,12 +170,12 @@ export function TablesPage() {
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search table"
-            className="border-gigino-line min-h-12 w-full rounded-[var(--gigino-radius-md)] border bg-white pr-3 pl-10 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            className="border-gigino-line bg-gigino-app focus:border-gigino-tomato min-h-12 w-full rounded-[12px] border pr-3 pl-10 text-sm outline-none focus:ring-4 focus:ring-red-100"
           />
         </label>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {visibleTables.map((table) => (
           <TableCard
             key={table.id}

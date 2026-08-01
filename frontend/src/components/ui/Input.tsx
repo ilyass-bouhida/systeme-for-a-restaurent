@@ -10,12 +10,12 @@ export function Input({ label, error, className, id, ...props }: InputProps) {
   const inputId = id ?? props.name;
 
   return (
-    <label className="text-gigino-muted grid gap-2 text-sm font-bold">
+    <label className="text-gigino-muted grid gap-2 text-sm font-extrabold">
       {label && <span>{label}</span>}
       <input
         id={inputId}
         className={cn(
-          "border-gigino-line text-gigino-ink placeholder:text-gigino-muted/60 min-h-12 w-full rounded-[var(--gigino-radius-md)] border bg-white px-3.5 text-base transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100",
+          "border-gigino-line text-gigino-ink placeholder:text-gigino-muted/60 focus:border-gigino-tomato min-h-13 w-full rounded-[var(--gigino-radius-md)] border bg-white px-3.5 text-base transition outline-none focus:ring-4 focus:ring-red-100",
           error && "border-red-400 focus:border-red-500 focus:ring-red-100",
           className,
         )}

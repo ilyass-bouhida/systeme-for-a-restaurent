@@ -30,13 +30,13 @@ export function OrderSummary({
   const cashReady = paidCents >= order.total_cents && order.total_cents > 0;
 
   return (
-    <aside className="border-gigino-line flex min-h-[calc(100vh-10rem)] flex-col rounded-[var(--gigino-radius-lg)] border bg-white p-4 shadow-[var(--gigino-shadow-floating)] sm:p-5 xl:sticky xl:top-[88px] xl:max-h-[calc(100vh-6.5rem)]">
+    <aside className="border-gigino-line flex min-h-[calc(100vh-9rem)] flex-col rounded-[20px] border bg-white p-4 shadow-[var(--gigino-shadow-floating)] sm:p-5 xl:sticky xl:top-5 xl:max-h-[calc(100vh-2.5rem)]">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-gigino-muted text-xs font-black tracking-[0.14em] uppercase">
+          <p className="text-gigino-muted text-xs font-extrabold tracking-[0.14em] uppercase">
             Current order
           </p>
-          <h2 className="mt-1 text-xl font-black">{order.table.label}</h2>
+          <h2 className="mt-1 text-xl font-extrabold">{order.table.label}</h2>
         </div>
         <span className="bg-gigino-subtle text-gigino-muted rounded-lg px-2.5 py-1.5 text-xs font-bold">
           {order.items.reduce((sum, item) => sum + item.quantity, 0)} items
@@ -57,7 +57,7 @@ export function OrderSummary({
           order.items.map((item) => (
             <div
               key={item.id}
-              className="border-gigino-line bg-gigino-app rounded-2xl border p-3"
+              className="border-gigino-line bg-gigino-app rounded-[14px] border p-3"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -111,9 +111,11 @@ export function OrderSummary({
       </div>
 
       <div className="border-gigino-line mt-5 border-t pt-5">
-        <div className="mb-5 flex items-end justify-between">
-          <span className="text-gigino-muted text-sm font-bold">Total</span>
-          <strong className="text-3xl font-black tracking-[-0.04em]">
+        <div className="bg-gigino-app mb-5 flex items-end justify-between rounded-[14px] p-4">
+          <span className="text-gigino-muted text-sm font-extrabold tracking-[0.08em] uppercase">
+            Total
+          </span>
+          <strong className="text-3xl font-extrabold tracking-[-0.04em]">
             {formatMoney(order.total_cents)}
           </strong>
         </div>
@@ -140,15 +142,6 @@ export function OrderSummary({
 
             <div className="mt-4 grid grid-cols-2 gap-2.5">
               <Button
-                variant="secondary"
-                size="lg"
-                icon={<Pause className="size-5" />}
-                onClick={onHold}
-                disabled={busy || order.items.length === 0}
-              >
-                Hold
-              </Button>
-              <Button
                 variant="success"
                 size="lg"
                 icon={<Banknote className="size-5" />}
@@ -157,15 +150,24 @@ export function OrderSummary({
               >
                 Cash
               </Button>
+              <Button
+                size="lg"
+                icon={<CreditCard className="size-5" />}
+                onClick={() => onPay("card")}
+                disabled={busy || order.items.length === 0}
+              >
+                Card
+              </Button>
             </div>
             <Button
+              variant="danger"
               size="lg"
               className="mt-2.5 w-full"
-              icon={<CreditCard className="size-5" />}
-              onClick={() => onPay("card")}
+              icon={<Pause className="size-5" />}
+              onClick={onHold}
               disabled={busy || order.items.length === 0}
             >
-              Pay by card
+              Hold table
             </Button>
             <p className="text-gigino-muted mt-3 text-center text-[11px] leading-5">
               Payment closes the table and updates admin revenue instantly.

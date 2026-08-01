@@ -183,7 +183,31 @@ export function OrderPage() {
         </div>
       )}
 
-      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_402px]">
+      <div className="grid items-start gap-4 xl:grid-cols-[104px_minmax(0,1fr)_402px]">
+        <aside className="border-gigino-line sticky top-5 hidden rounded-[18px] border bg-white p-2 shadow-[var(--gigino-shadow-card)] xl:block">
+          <p className="text-gigino-muted px-2 py-2 text-[10px] font-extrabold tracking-[0.12em] uppercase">
+            Menu
+          </p>
+          <div className="grid gap-1.5">
+            {menu.data?.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setCategoryId(category.id)}
+                className={cn(
+                  "text-gigino-muted grid min-h-[68px] place-items-center content-center gap-1 rounded-[13px] px-2 text-center text-[11px] font-extrabold transition",
+                  selectedCategory === category.id &&
+                    "bg-gigino-tomato text-white shadow-sm",
+                )}
+              >
+                <span className="grid size-7 place-items-center rounded-lg bg-current/10 text-[10px] font-black uppercase">
+                  {category.name.slice(0, 2)}
+                </span>
+                <span className="line-clamp-1">{category.name}</span>
+              </button>
+            ))}
+          </div>
+        </aside>
+
         <section className="min-w-0">
           <label className="relative mb-4 block">
             <Search className="text-gigino-muted pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2" />
@@ -191,10 +215,10 @@ export function OrderPage() {
               value={productSearch}
               onChange={(event) => setProductSearch(event.target.value)}
               placeholder="Search the menu…"
-              className="border-gigino-line min-h-14 w-full rounded-[var(--gigino-radius-md)] border bg-white pr-4 pl-12 text-base outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              className="border-gigino-line focus:border-gigino-tomato min-h-14 w-full rounded-[14px] border bg-white pr-4 pl-12 text-base outline-none focus:ring-4 focus:ring-red-100"
             />
           </label>
-          <div className="flex gap-2 overflow-x-auto pb-3">
+          <div className="flex gap-2 overflow-x-auto pb-3 xl:hidden">
             {menu.data?.map((category) => (
               <button
                 key={category.id}
@@ -210,7 +234,7 @@ export function OrderPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:[grid-template-columns:repeat(auto-fill,minmax(164px,1fr))]">
             {products.map((product) => (
               <ProductCard
                 key={product.id}

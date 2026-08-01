@@ -25,18 +25,20 @@ export function StatCard({
   };
 
   return (
-    <Card className="min-h-32 p-5">
+    <Card className="min-h-28 p-4 sm:p-5">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-gigino-muted text-sm font-bold">{label}</p>
-          <p className="mt-2 text-2xl font-black tracking-tight xl:text-3xl">
+          <p className="text-gigino-muted text-xs font-extrabold tracking-[0.06em] uppercase">
+            {label}
+          </p>
+          <p className="mt-2 text-2xl font-extrabold tracking-tight xl:text-[28px]">
             {value}
           </p>
           <p className="text-gigino-muted mt-2 text-xs font-medium">{detail}</p>
         </div>
         <div
           className={cn(
-            "grid size-11 place-items-center rounded-2xl",
+            "grid size-10 place-items-center rounded-[12px]",
             tones[tone],
           )}
         >

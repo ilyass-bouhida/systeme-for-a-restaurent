@@ -6,7 +6,6 @@ import {
   BarChart3,
   CircleGauge,
   ClipboardList,
-  HelpCircle,
   LayoutDashboard,
   LogOut,
   PackageOpen,
@@ -16,7 +15,7 @@ import {
   Users,
   Wifi,
 } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const workerLinks = [
   {
@@ -52,7 +51,9 @@ export function AppShell() {
   const user = useAuthStore((state) => state.user);
   const clearSession = useAuthStore((state) => state.clearSession);
   const navigate = useNavigate();
+  const location = useLocation();
   const isAdmin = user?.roles.includes("admin");
+  const isOrderWorkspace = /^\/cashier\/orders\/\d+/.test(location.pathname);
   const links = isAdmin
     ? adminLinks
     : workerLinks.filter((link) => user?.permissions.includes(link.permission));
@@ -72,20 +73,30 @@ export function AppShell() {
 
   return (
     <div className="bg-gigino-app text-gigino-ink min-h-screen">
-      <aside className="border-gigino-line fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r bg-[#f2eee7] p-4 xl:flex">
-        <div className="mb-8 flex items-center gap-3 px-1 py-2">
-          <div className="bg-gigino-ink grid size-11 place-items-center rounded-[14px] text-white shadow-sm">
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-40 hidden w-[240px] flex-col border-r border-white/10 bg-[#1c1917] p-4 text-white xl:flex",
+          isOrderWorkspace && "w-[76px] items-center px-2.5",
+        )}
+      >
+        <div
+          className={cn(
+            "mb-8 flex items-center gap-3 px-1 py-2",
+            isOrderWorkspace && "justify-center px-0",
+          )}
+        >
+          <div className="grid size-11 place-items-center rounded-[13px] bg-[#c93b27] text-white shadow-sm">
             <span className="text-lg font-black">G</span>
           </div>
-          <div>
+          <div className={cn(isOrderWorkspace && "hidden")}>
             <p className="text-xl font-black tracking-tight">Gigino</p>
-            <p className="text-gigino-muted text-[11px] font-semibold">
+            <p className="text-[11px] font-semibold text-stone-400">
               {isAdmin ? "Admin console" : "Restaurant POS"}
             </p>
           </div>
         </div>
 
-        <nav className="grid gap-1">
+        <nav className={cn("grid gap-1", isOrderWorkspace && "w-full")}>
           {links.map(({ to, label, icon: Icon, ...link }) => (
             <NavLink
               key={to}
@@ -95,21 +106,30 @@ export function AppShell() {
                 cn(
                   "text-gigino-muted hover:text-gigino-ink flex min-h-12 items-center gap-3 rounded-[14px] px-3.5 text-sm font-bold transition hover:bg-white/70",
                   isActive &&
-                    "text-gigino-ink bg-white shadow-[0_3px_12px_rgba(22,19,16,.06)]",
+                    "bg-gigino-tomato hover:bg-gigino-tomato-dark text-white shadow-none hover:text-white",
+                  !isActive &&
+                    "text-stone-400 hover:bg-white/8 hover:text-white",
+                  isOrderWorkspace && "justify-center px-0",
                 )
               }
+              title={isOrderWorkspace ? label : undefined}
             >
               <Icon className="size-5" />
-              {label}
+              <span className={cn(isOrderWorkspace && "sr-only")}>{label}</span>
             </NavLink>
           ))}
         </nav>
 
         {isAdmin && (
-          <div className="border-gigino-line mt-5 border-t pt-4">
+          <div
+            className={cn(
+              "mt-5 border-t border-white/10 pt-4",
+              isOrderWorkspace && "hidden",
+            )}
+          >
             <NavLink
               to="/cashier/tables"
-              className="text-gigino-tomato flex min-h-12 items-center gap-3 rounded-[14px] px-3.5 text-sm font-bold transition hover:bg-white"
+              className="bg-gigino-tomato hover:bg-gigino-tomato-dark flex min-h-12 items-center gap-3 rounded-[13px] px-3.5 text-sm font-bold text-white transition"
             >
               <Table2 className="size-5" />
               Open cashier
@@ -117,18 +137,35 @@ export function AppShell() {
           </div>
         )}
 
-        <div className="mt-auto mb-3 rounded-[18px] bg-white/75 p-3.5">
-          <div className="text-gigino-olive-dark mb-3 flex items-center gap-2 text-[11px] font-bold">
+        <div
+          className={cn(
+            "mt-auto mb-3 border-t border-white/10 pt-4",
+            isOrderWorkspace && "w-full",
+          )}
+        >
+          <div
+            className={cn(
+              "mb-3 flex items-center gap-2 text-[11px] font-bold text-emerald-400",
+              isOrderWorkspace && "justify-center",
+            )}
+          >
             <Wifi className="size-3.5" />
-            Live connection
+            <span className={cn(isOrderWorkspace && "sr-only")}>
+              Live connection
+            </span>
           </div>
-          <div className="mb-3 flex items-center gap-3">
-            <div className="bg-gigino-ink grid size-9 place-items-center rounded-full text-sm font-bold text-white">
+          <div
+            className={cn(
+              "mb-3 flex items-center gap-3",
+              isOrderWorkspace && "justify-center",
+            )}
+          >
+            <div className="text-gigino-ink grid size-9 place-items-center rounded-full bg-white text-sm font-bold">
               {user?.name.charAt(0).toUpperCase()}
             </div>
-            <div className="min-w-0">
+            <div className={cn("min-w-0", isOrderWorkspace && "hidden")}>
               <p className="truncate text-sm font-bold">{user?.name}</p>
-              <p className="text-gigino-muted truncate text-xs">
+              <p className="truncate text-xs text-stone-400">
                 {isAdmin ? "Administrator" : "Cashier"}
               </p>
             </div>
@@ -136,23 +173,31 @@ export function AppShell() {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start"
+            className={cn(
+              "w-full justify-start text-stone-400 hover:bg-white/10 hover:text-white",
+              isOrderWorkspace && "justify-center px-0",
+            )}
             icon={<LogOut className="size-4" />}
             onClick={logout}
           >
-            Sign out
+            <span className={cn(isOrderWorkspace && "sr-only")}>Sign out</span>
           </Button>
           <NavLink
             to="/profile"
-            className="text-gigino-muted hover:bg-gigino-subtle hover:text-gigino-ink mt-1 flex min-h-10 items-center gap-2 rounded-xl px-3 text-xs font-bold transition"
+            className={cn(
+              "mt-1 flex min-h-10 items-center gap-2 rounded-xl px-3 text-xs font-bold text-stone-400 transition hover:bg-white/10 hover:text-white",
+              isOrderWorkspace && "justify-center px-0",
+            )}
           >
             <UserCog className="size-4" />
-            Manage my account
+            <span className={cn(isOrderWorkspace && "sr-only")}>
+              Manage my account
+            </span>
           </NavLink>
         </div>
       </aside>
 
-      <header className="border-gigino-line bg-gigino-app/95 sticky top-0 z-30 flex min-h-[72px] items-center justify-between border-b px-4 backdrop-blur xl:ml-[232px] xl:px-8">
+      <header className="border-gigino-line bg-gigino-app/95 sticky top-0 z-30 flex min-h-[64px] items-center justify-between border-b px-4 backdrop-blur xl:hidden">
         <div className="flex items-center gap-2 xl:hidden">
           <span className="bg-gigino-ink grid size-9 place-items-center rounded-xl font-black text-white">
             G
@@ -165,13 +210,6 @@ export function AppShell() {
             Live
           </span>
           <NavLink
-            to={isAdmin ? "/admin/reports" : "/cashier/orders"}
-            aria-label="Open help and recent activity"
-            className="border-gigino-line hover:bg-gigino-subtle grid size-10 place-items-center rounded-[13px] border bg-white"
-          >
-            <HelpCircle className="size-4" aria-hidden="true" />
-          </NavLink>
-          <NavLink
             to="/profile"
             aria-label={`Manage ${user?.name ?? "my"} account`}
             className="bg-gigino-ink grid size-10 place-items-center rounded-[13px] text-sm font-black text-white"
@@ -181,7 +219,12 @@ export function AppShell() {
         </div>
       </header>
 
-      <main className="pb-24 xl:ml-[232px] xl:pb-8">
+      <main
+        className={cn(
+          "pb-24 xl:ml-[240px] xl:pb-8",
+          isOrderWorkspace && "xl:ml-[76px]",
+        )}
+      >
         <Outlet />
       </main>
 
