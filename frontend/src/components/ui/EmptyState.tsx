@@ -4,10 +4,12 @@ export function EmptyState({
   icon,
   title,
   description,
+  action,
 }: {
   icon: ReactNode;
   title: string;
   description: string;
+  action?: ReactNode;
 }) {
   return (
     <div className="border-gigino-line grid min-h-56 place-items-center rounded-[var(--gigino-radius-lg)] border border-dashed bg-white p-8 text-center">
@@ -17,6 +19,7 @@ export function EmptyState({
         </div>
         <h3 className="text-gigino-ink text-lg font-bold">{title}</h3>
         <p className="text-gigino-muted text-sm leading-6">{description}</p>
+        {action}
       </div>
     </div>
   );

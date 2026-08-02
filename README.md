@@ -1,6 +1,10 @@
 # Gigino Restaurant POS
 
-Gigino is a full-stack restaurant caisse system built with:
+Gigino is the default, fully editable name of this full-stack restaurant caisse
+system. Administrators can change the restaurant identity from System Settings
+without changing code.
+
+The project is built with:
 
 - React, TypeScript, Vite, and Tailwind CSS
 - Laravel, Sanctum, policies, rate limits, queues, and Reverb

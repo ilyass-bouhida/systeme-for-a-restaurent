@@ -10,6 +10,10 @@ All successful endpoints return JSON. Validation failures use Laravel's standard
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
 
+## Public branding
+
+- `GET /api/branding`
+
 ## Cashier
 
 - `GET /api/tables`
@@ -35,6 +39,8 @@ All successful endpoints return JSON. Validation failures use Laravel's standard
 - CRUD `/api/admin/tables`
 - `GET /api/admin/dashboard`
 - `GET /api/admin/reports?period=day|week|month|year`
+- `GET /api/admin/settings`
+- `PUT /api/admin/settings`
 
 Amounts use integer centimes in request/response payloads. The frontend formats
 them as Moroccan dirhams (`MAD`) by default.

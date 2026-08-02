@@ -9,7 +9,10 @@ use Illuminate\Support\Str;
 
 class ReceiptService
 {
-    public function __construct(private readonly ReceiptPrinter $printer) {}
+    public function __construct(
+        private readonly ReceiptPrinter $printer,
+        private readonly BrandingService $branding,
+    ) {}
 
     public function createFor(Payment $payment): Receipt
     {
@@ -19,7 +22,7 @@ class ReceiptService
             'payment_id' => $payment->id,
             'number' => $this->nextNumber($payment),
             'payload' => [
-                'restaurant' => 'Gigino',
+                'restaurant' => $this->branding->restaurantName(),
                 'receipt_number' => null,
                 'table' => $payment->order->restaurantTable->label,
                 'worker' => $payment->processor->name,
@@ -58,7 +61,7 @@ class ReceiptService
     private function nextNumber(Payment $payment): string
     {
         return sprintf(
-            'GIG-%s-%06d-%s',
+            'POS-%s-%06d-%s',
             now()->format('Ymd'),
             $payment->id,
             strtoupper(Str::random(4)),

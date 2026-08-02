@@ -7,6 +7,7 @@ use App\Contracts\CashDrawer;
 use App\Contracts\ReceiptPrinter;
 use App\Enums\TableStatus;
 use App\Models\Receipt;
+use App\Models\RestaurantSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -25,6 +26,9 @@ class PaymentAndReportsTest extends TestCase
     {
         $worker = $this->makeWorker();
         $this->actingAsPos($worker);
+        RestaurantSetting::query()->whereKey(RestaurantSetting::SINGLETON_ID)->update([
+            'restaurant_name' => 'Atlas Bistro',
+        ]);
         $this->mock(ReceiptPrinter::class, fn (MockInterface $mock) => $mock
             ->shouldReceive('print')->twice());
         $this->mock(CashDrawer::class, fn (MockInterface $mock) => $mock
@@ -42,7 +46,7 @@ class PaymentAndReportsTest extends TestCase
             'method' => 'cash',
             'paid_cents' => 20000,
         ])->assertOk()
-            ->assertJsonPath('data.payload.restaurant', 'Gigino')
+            ->assertJsonPath('data.payload.restaurant', 'Atlas Bistro')
             ->assertJsonPath('data.payload.change_cents', 2000)
             ->assertJsonPath('data.print_count', 1)
             ->json('data');

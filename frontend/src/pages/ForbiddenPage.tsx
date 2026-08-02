@@ -13,7 +13,8 @@ export function ForbiddenPage() {
         </div>
         <h1 className="text-3xl font-black">Access not assigned</h1>
         <p className="text-stone-500">
-          An administrator has not enabled this part of Gigino for your account.
+          An administrator has not enabled this part of the system for your
+          account.
         </p>
         <Button onClick={() => navigate(-1)}>Go back</Button>
       </div>

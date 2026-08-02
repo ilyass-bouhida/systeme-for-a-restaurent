@@ -1,5 +1,5 @@
 export function LoadingScreen({
-  label = "Loading Gigino…",
+  label = "Loading workspace…",
 }: {
   label?: string;
 }) {

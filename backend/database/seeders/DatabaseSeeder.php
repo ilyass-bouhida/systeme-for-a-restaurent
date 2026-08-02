@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\RestaurantSetting;
 use App\Models\RestaurantTable;
 use App\Models\User;
 use App\Support\Permissions;
@@ -17,6 +18,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        RestaurantSetting::query()->firstOrCreate(
+            ['id' => RestaurantSetting::SINGLETON_ID],
+            ['restaurant_name' => 'Gigino'],
+        );
+
         foreach (Permissions::all() as $permission) {
             Permission::query()->firstOrCreate([
                 'name' => $permission,

@@ -4,9 +4,11 @@ use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\ReportController;
+use App\Http\Controllers\Api\Admin\SettingsController;
 use App\Http\Controllers\Api\Admin\TableController as AdminTableController;
 use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BrandingController;
 use App\Http\Controllers\Api\MenuController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderItemController;
@@ -21,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function (): void {
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
 });
+
+Route::get('branding', BrandingController::class)->middleware('throttle:api');
 
 Route::middleware(['auth:sanctum', 'active', 'throttle:api'])->group(function (): void {
     Route::prefix('auth')->group(function (): void {
@@ -58,6 +62,8 @@ Route::middleware(['auth:sanctum', 'active', 'throttle:api'])->group(function ()
     Route::prefix('admin')->middleware('role:admin')->group(function (): void {
         Route::get('dashboard', DashboardController::class);
         Route::get('reports', ReportController::class);
+        Route::get('settings', [SettingsController::class, 'show']);
+        Route::put('settings', [SettingsController::class, 'update']);
         Route::apiResource('users', AdminUserController::class);
         Route::apiResource('categories', AdminCategoryController::class);
         Route::apiResource('products', AdminProductController::class);

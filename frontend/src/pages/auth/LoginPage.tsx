@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { login } from "@/features/auth/auth-api";
+import { useRestaurantName } from "@/features/branding/branding-queries";
 import { useAuthStore } from "@/stores/auth-store";
 import { getErrorMessage } from "@/utils/errors";
 import { useMutation } from "@tanstack/react-query";
@@ -25,6 +26,8 @@ export function LoginPage() {
   const setSession = useAuthStore((state) => state.setSession);
   const navigate = useNavigate();
   const location = useLocation();
+  const { restaurantName } = useRestaurantName();
+  const restaurantInitial = restaurantName.charAt(0).toUpperCase() || "R";
   const {
     register,
     handleSubmit,
@@ -83,7 +86,9 @@ export function LoginPage() {
             <ChefHat className="size-7" />
           </div>
           <div>
-            <p className="text-2xl font-black tracking-tight">Gigino</p>
+            <p className="text-2xl font-black tracking-tight">
+              {restaurantName}
+            </p>
             <p className="text-sm text-stone-400">Restaurant command center</p>
           </div>
         </div>
@@ -101,8 +106,8 @@ export function LoginPage() {
             Perfectly clear.
           </h1>
           <p className="mt-6 max-w-lg text-lg leading-8 text-stone-400">
-            A focused workspace for Gigino’s team—from the first order to the
-            final receipt.
+            A focused workspace for {restaurantName}’s team—from the first order
+            to the final receipt.
           </p>
         </div>
 
@@ -128,9 +133,11 @@ export function LoginPage() {
         <div className="border-gigino-line w-full max-w-[440px] rounded-[24px] border bg-white p-6 shadow-[var(--gigino-shadow-floating)] sm:p-8 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <div className="bg-gigino-tomato grid size-11 place-items-center rounded-[13px] text-white">
-              <ChefHat className="size-6" />
+              <span className="text-lg font-black">{restaurantInitial}</span>
             </div>
-            <span className="text-2xl font-extrabold">Gigino</span>
+            <span className="truncate text-2xl font-extrabold">
+              {restaurantName}
+            </span>
           </div>
 
           <p className="mb-2 text-sm font-bold tracking-[0.16em] text-stone-500 uppercase">
@@ -146,7 +153,7 @@ export function LoginPage() {
           <form
             className="mt-8 grid gap-5"
             onSubmit={handleSubmit((values) =>
-              mutation.mutate({ ...values, device_name: "gigino-web-pos" }),
+              mutation.mutate({ ...values, device_name: "restaurant-web-pos" }),
             )}
           >
             <Input

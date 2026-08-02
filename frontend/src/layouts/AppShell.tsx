@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/Button";
+import { useRestaurantName } from "@/features/branding/branding-queries";
 import { api } from "@/services/api";
 import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/utils/cn";
@@ -9,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   PackageOpen,
+  Settings2,
   Store,
   Table2,
   UserCog,
@@ -45,10 +47,12 @@ const adminLinks = [
   { to: "/admin/tables", label: "Tables", icon: Store },
   { to: "/admin/workers", label: "Workers", icon: Users },
   { to: "/admin/reports", label: "Reports", icon: BarChart3 },
+  { to: "/admin/settings", label: "Settings", icon: Settings2 },
 ];
 
 export function AppShell() {
   const user = useAuthStore((state) => state.user);
+  const { restaurantName } = useRestaurantName();
   const clearSession = useAuthStore((state) => state.clearSession);
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,6 +65,7 @@ export function AppShell() {
     ...links,
     { to: "/profile", label: "My account", icon: UserCog },
   ];
+  const restaurantInitial = restaurantName.charAt(0).toUpperCase() || "R";
 
   const logout = async () => {
     try {
@@ -86,10 +91,12 @@ export function AppShell() {
           )}
         >
           <div className="grid size-11 place-items-center rounded-[13px] bg-[#c93b27] text-white shadow-sm">
-            <span className="text-lg font-black">G</span>
+            <span className="text-lg font-black">{restaurantInitial}</span>
           </div>
           <div className={cn(isOrderWorkspace && "hidden")}>
-            <p className="text-xl font-black tracking-tight">Gigino</p>
+            <p className="max-w-36 truncate text-xl font-black tracking-tight">
+              {restaurantName}
+            </p>
             <p className="text-[11px] font-semibold text-stone-400">
               {isAdmin ? "Admin console" : "Restaurant POS"}
             </p>
@@ -200,9 +207,11 @@ export function AppShell() {
       <header className="border-gigino-line bg-gigino-app/95 sticky top-0 z-30 flex min-h-[64px] items-center justify-between border-b px-4 backdrop-blur xl:hidden">
         <div className="flex items-center gap-2 xl:hidden">
           <span className="bg-gigino-ink grid size-9 place-items-center rounded-xl font-black text-white">
-            G
+            {restaurantInitial}
           </span>
-          <span className="text-lg font-black">Gigino</span>
+          <span className="max-w-44 truncate text-lg font-black">
+            {restaurantName}
+          </span>
         </div>
         <div className="text-gigino-muted ml-auto flex items-center gap-2 text-sm">
           <span className="hidden items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-[11px] font-extrabold text-emerald-800 ring-1 ring-emerald-200 sm:flex">

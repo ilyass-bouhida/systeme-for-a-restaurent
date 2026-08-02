@@ -3,6 +3,10 @@ export type TableStatus = "available" | "occupied" | "hold";
 export type OrderStatus = "open" | "held" | "paid" | "cancelled";
 export type PaymentMethod = "cash" | "card";
 
+export interface RestaurantBranding {
+  restaurant_name: string;
+}
+
 export interface User {
   id: number;
   name: string;

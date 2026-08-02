@@ -1,3 +1,4 @@
+import { BrandingTitle } from "@/app/BrandingTitle";
 import {
   AdminRoute,
   PermissionRoute,
@@ -59,6 +60,11 @@ const ReportsPage = lazy(() =>
     default: module.ReportsPage,
   })),
 );
+const SettingsPage = lazy(() =>
+  import("@/pages/admin/SettingsPage").then((module) => ({
+    default: module.SettingsPage,
+  })),
+);
 const ForbiddenPage = lazy(() =>
   import("@/pages/ForbiddenPage").then((module) => ({
     default: module.ForbiddenPage,
@@ -80,6 +86,7 @@ export default function App() {
 
   return (
     <>
+      <BrandingTitle />
       <RealtimeSync />
       <Suspense fallback={<div className="min-h-screen bg-[#f7f5f0]" />}>
         <Routes>
@@ -107,6 +114,7 @@ export default function App() {
                 <Route path="/admin/tables" element={<TablesAdminPage />} />
                 <Route path="/admin/workers" element={<WorkersPage />} />
                 <Route path="/admin/reports" element={<ReportsPage />} />
+                <Route path="/admin/settings" element={<SettingsPage />} />
               </Route>
             </Route>
           </Route>

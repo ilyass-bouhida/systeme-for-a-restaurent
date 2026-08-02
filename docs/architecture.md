@@ -41,19 +41,20 @@ Laravel API
 
 ## 2. Database Schema
 
-| Table | Purpose |
-| --- | --- |
-| `users` | Workers and admins, active state, email, password |
-| `roles`, `permissions`, pivots | Role and per-user permission assignments |
-| `categories` | Menu grouping and display order |
-| `products` | Dishes and drinks, image, price in centimes, active state |
-| `restaurant_tables` | Table label, capacity, availability, revenue source |
-| `orders` | Table order, worker, lifecycle status, totals, timestamps |
-| `order_items` | Product snapshot, quantity, price, line total |
-| `payments` | Cash/card payment, paid amount, change, transaction reference |
-| `receipts` | Immutable receipt number and printable payload snapshot |
-| `activity_logs` | Auditable operational activity |
-| `personal_access_tokens` | Sanctum API sessions |
+| Table                          | Purpose                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| `users`                        | Workers and admins, active state, email, password                        |
+| `roles`, `permissions`, pivots | Role and per-user permission assignments                                 |
+| `categories`                   | Menu grouping and display order                                          |
+| `products`                     | Dishes and drinks, image, price in centimes, active state                |
+| `restaurant_tables`            | Table label, capacity, availability, revenue source                      |
+| `orders`                       | Table order, worker, lifecycle status, totals, timestamps                |
+| `order_items`                  | Product snapshot, quantity, price, line total                            |
+| `payments`                     | Cash/card payment, paid amount, change, transaction reference            |
+| `receipts`                     | Immutable receipt number and printable payload snapshot                  |
+| `activity_logs`                | Auditable operational activity                                           |
+| `restaurant_settings`          | Singleton restaurant identity used across the interface and new receipts |
+| `personal_access_tokens`       | Sanctum API sessions                                                     |
 
 Important constraints:
 
@@ -122,6 +123,7 @@ Main routes:
 - `/admin/tables`
 - `/admin/workers`
 - `/admin/reports`
+- `/admin/settings`
 
 ## 5. Laravel API Structure
 
@@ -133,6 +135,7 @@ payments or conflicting table sessions.
 API groups:
 
 - `/api/auth`
+- `/api/branding`
 - `/api/tables`
 - `/api/menu`
 - `/api/orders`
@@ -144,6 +147,7 @@ API groups:
 - `/api/admin/products`
 - `/api/admin/tables`
 - `/api/admin/reports`
+- `/api/admin/settings`
 
 ## 6. Roles and Permissions
 
@@ -189,6 +193,7 @@ is a convenience only; every permission is enforced again by Laravel.
 3. Manage workers and their permissions.
 4. Manage categories, products, and tables.
 5. Review orders, payments, receipts, and time-range reports.
+6. Change the restaurant name once and apply it to all staff interfaces and new receipts.
 
 ## 8. Hardware Integration
 

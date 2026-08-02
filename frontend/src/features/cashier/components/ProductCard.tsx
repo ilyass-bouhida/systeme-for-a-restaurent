@@ -41,7 +41,7 @@ export function ProductCard({
           {product.name}
         </h3>
         <p className="text-gigino-muted mt-1 line-clamp-1 text-xs">
-          {product.description ?? "Gigino menu item"}
+          {product.description ?? "Restaurant menu item"}
         </p>
         <div className="mt-3 flex items-center justify-between gap-2">
           <p className="text-gigino-ink text-base font-black">
