@@ -16,10 +16,16 @@ class ReportController extends Controller
     {
         $validated = $request->validate([
             'period' => ['required', Rule::in(['day', 'week', 'month', 'year'])],
+            'year' => ['nullable', 'integer', 'between:2000,'.(now()->year + 1)],
+            'month' => ['nullable', 'integer', 'between:1,12'],
         ]);
 
         return response()->json([
-            'data' => $this->reports->report($validated['period']),
+            'data' => $this->reports->report(
+                $validated['period'],
+                isset($validated['year']) ? (int) $validated['year'] : null,
+                isset($validated['month']) ? (int) $validated['month'] : null,
+            ),
         ]);
     }
 }

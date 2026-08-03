@@ -38,9 +38,13 @@ All successful endpoints return JSON. Validation failures use Laravel's standard
 - CRUD `/api/admin/products`
 - CRUD `/api/admin/tables`
 - `GET /api/admin/dashboard`
-- `GET /api/admin/reports?period=day|week|month|year`
+- `GET /api/admin/reports?period=day|week|month|year&year=YYYY&month=1..12`
 - `GET /api/admin/settings`
 - `PUT /api/admin/settings`
 
 Amounts use integer centimes in request/response payloads. The frontend formats
 them as Moroccan dirhams (`MAD`) by default.
+
+For calendar filtering, `month` uses the selected month and year, while `year`
+uses the complete selected year. The API applies an exclusive end date so data
+from the following month or year is never included.

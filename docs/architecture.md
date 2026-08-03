@@ -190,10 +190,11 @@ is a convenience only; every permission is enforced again by Laravel.
 
 1. Sign in to the admin dashboard.
 2. Monitor tables, activity, worker totals, and revenue.
-3. Manage workers and their permissions.
-4. Manage categories, products, and tables.
-5. Review orders, payments, receipts, and time-range reports.
-6. Change the restaurant name once and apply it to all staff interfaces and new receipts.
+3. Filter dashboard financials by an exact calendar month or complete year.
+4. Manage workers and their permissions.
+5. Manage categories, products, and tables.
+6. Review orders, payments, receipts, and time-range reports.
+7. Change the restaurant name once and apply it to all staff interfaces and new receipts.
 
 ## 8. Hardware Integration
 

@@ -78,9 +78,9 @@ class ReportService
     /**
      * @return array<string, mixed>
      */
-    public function report(string $period): array
+    public function report(string $period, ?int $year = null, ?int $month = null): array
     {
-        $start = $this->startForPeriod($period);
+        [$start, $end] = $this->rangeForPeriod($period, $year, $month);
         $bucketFormat = match ($period) {
             'day' => 'H:00',
             'week' => 'D',
@@ -95,6 +95,7 @@ class ReportService
                 'order.items:id,order_id,quantity,line_total_cents,line_cost_cents',
             ])
             ->where('completed_at', '>=', $start)
+            ->where('completed_at', '<', $end)
             ->orderBy('completed_at')
             ->get();
 
@@ -107,7 +108,9 @@ class ReportService
                 'SUM(line_cost_cents) as cost_cents, '.
                 'SUM(line_total_cents - line_cost_cents) as profit_cents',
             )
-            ->whereHas('order.payment', fn ($query) => $query->where('completed_at', '>=', $start))
+            ->whereHas('order.payment', fn ($query) => $query
+                ->where('completed_at', '>=', $start)
+                ->where('completed_at', '<', $end))
             ->groupBy('product_name')
             ->orderByDesc('quantity')
             ->limit(10)
@@ -126,6 +129,9 @@ class ReportService
         return [
             'period' => $period,
             'from' => $start->toIso8601String(),
+            'to' => $end->toIso8601String(),
+            'selected_year' => $start->year,
+            'selected_month' => $period === 'month' ? $start->month : null,
             'total_revenue_cents' => $summary['revenue_cents'],
             'total_cost_cents' => $summary['cost_cents'],
             'gross_profit_cents' => $summary['profit_cents'],
@@ -172,6 +178,39 @@ class ReportService
             'year' => CarbonImmutable::now()->startOfYear(),
             default => throw new \InvalidArgumentException('Unsupported report period.'),
         };
+    }
+
+    /**
+     * @return array{0: CarbonImmutable, 1: CarbonImmutable}
+     */
+    private function rangeForPeriod(
+        string $period,
+        ?int $year = null,
+        ?int $month = null,
+    ): array {
+        $now = CarbonImmutable::now();
+
+        $start = match ($period) {
+            'day' => $now->startOfDay(),
+            'week' => $now->startOfWeek(),
+            'month' => $now
+                ->setDate($year ?? $now->year, $month ?? $now->month, 1)
+                ->startOfMonth(),
+            'year' => $now
+                ->setDate($year ?? $now->year, 1, 1)
+                ->startOfYear(),
+            default => throw new \InvalidArgumentException('Unsupported report period.'),
+        };
+
+        $end = match ($period) {
+            'day' => $start->addDay(),
+            'week' => $start->addWeek(),
+            'month' => $start->addMonth(),
+            'year' => $start->addYear(),
+            default => throw new \InvalidArgumentException('Unsupported report period.'),
+        };
+
+        return [$start, $end];
     }
 
     /**

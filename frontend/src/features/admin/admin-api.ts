@@ -46,6 +46,11 @@ export interface ProductInput {
   image_prompt?: string;
 }
 
+export interface ReportFilters {
+  year?: number;
+  month?: number;
+}
+
 export async function getDashboard(): Promise<DashboardData> {
   return (await api.get<ApiResource<DashboardData>>("/admin/dashboard")).data
     .data;
@@ -53,10 +58,11 @@ export async function getDashboard(): Promise<DashboardData> {
 
 export async function getReport(
   period: ReportData["period"],
+  filters: ReportFilters = {},
 ): Promise<ReportData> {
   return (
     await api.get<ApiResource<ReportData>>("/admin/reports", {
-      params: { period },
+      params: { period, ...filters },
     })
   ).data.data;
 }

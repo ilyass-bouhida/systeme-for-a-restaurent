@@ -182,6 +182,9 @@ export interface ReportRow {
 export interface ReportData {
   period: "day" | "week" | "month" | "year";
   from: string;
+  to: string;
+  selected_year: number;
+  selected_month: number | null;
   total_revenue_cents: number;
   total_cost_cents: number;
   gross_profit_cents: number;

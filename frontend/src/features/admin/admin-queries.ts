@@ -19,17 +19,30 @@ import {
   updateUser,
   type CategoryInput,
   type ProductInput,
+  type ReportFilters,
   type TableInput,
   type UserInput,
 } from "@/features/admin/admin-api";
 import type { ReportData } from "@/types/api";
 import { getErrorMessage } from "@/utils/errors";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const adminKeys = {
   dashboard: ["admin", "dashboard"] as const,
-  report: (period: string) => ["admin", "report", period] as const,
+  report: (period: string, filters: ReportFilters = {}) =>
+    [
+      "admin",
+      "report",
+      period,
+      filters.year ?? null,
+      filters.month ?? null,
+    ] as const,
   users: ["admin", "users"] as const,
   categories: ["admin", "categories"] as const,
   products: ["admin", "products"] as const,
@@ -44,10 +57,14 @@ export function useDashboard() {
   });
 }
 
-export function useReport(period: ReportData["period"]) {
+export function useReport(
+  period: ReportData["period"],
+  filters: ReportFilters = {},
+) {
   return useQuery({
-    queryKey: adminKeys.report(period),
-    queryFn: () => getReport(period),
+    queryKey: adminKeys.report(period, filters),
+    queryFn: () => getReport(period, filters),
+    placeholderData: keepPreviousData,
     refetchInterval: 15_000,
   });
 }

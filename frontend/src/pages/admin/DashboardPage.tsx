@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   Banknote,
   Box,
+  CalendarDays,
   Check,
   ClipboardCheck,
   CreditCard,
@@ -39,10 +40,29 @@ const periods = [
 
 type Period = (typeof periods)[number][0];
 
+const now = new Date();
+const currentYear = now.getFullYear();
+const currentMonth = now.getMonth() + 1;
+const monthOptions = Array.from({ length: 12 }, (_, index) => ({
+  value: index + 1,
+  label: new Intl.DateTimeFormat("en", { month: "long" }).format(
+    new Date(2024, index, 1),
+  ),
+}));
+const yearOptions = Array.from(
+  { length: currentYear - 1999 },
+  (_, index) => currentYear - index,
+);
+
 export function DashboardPage() {
   const [period, setPeriod] = useState<Period>("day");
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [selectedYear, setSelectedYear] = useState(currentYear);
   const dashboard = useDashboard();
-  const report = useReport(period);
+  const report = useReport(period, {
+    year: period === "month" || period === "year" ? selectedYear : undefined,
+    month: period === "month" ? selectedMonth : undefined,
+  });
 
   if (dashboard.isLoading) {
     return <LoadingScreen label="Loading live operations…" />;
@@ -74,6 +94,16 @@ export function DashboardPage() {
     (table) => table.status === "occupied",
   ).length;
   const held = data.tables.filter((table) => table.status === "hold").length;
+  const selectedMonthName =
+    monthOptions.find((month) => month.value === selectedMonth)?.label ?? "";
+  const selectedPeriodLabel =
+    period === "month"
+      ? `${selectedMonthName} ${selectedYear}`
+      : period === "year"
+        ? String(selectedYear)
+        : period === "week"
+          ? "This week"
+          : "Today";
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -96,20 +126,72 @@ export function DashboardPage() {
             Revenue, cost, profit, guests, products, and service in one view.
           </p>
         </div>
-        <div className="border-gigino-line flex w-fit rounded-[13px] border bg-white p-1 shadow-[var(--gigino-shadow-card)]">
-          {periods.map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setPeriod(value)}
-              className={cn(
-                "text-gigino-muted min-h-10 rounded-[10px] px-3 text-xs font-extrabold transition sm:px-4",
-                period === value && "bg-gigino-tomato text-white",
-              )}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="grid gap-2 sm:justify-items-end">
+          <div className="border-gigino-line flex w-full overflow-x-auto rounded-[13px] border bg-white p-1 shadow-[var(--gigino-shadow-card)] sm:w-fit">
+            {periods.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setPeriod(value)}
+                className={cn(
+                  "text-gigino-muted min-h-10 min-w-20 flex-1 rounded-[10px] px-3 text-xs font-extrabold transition sm:flex-none sm:px-4",
+                  period === value && "bg-gigino-tomato text-white",
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="flex w-full gap-2 sm:w-auto">
+            <label className="text-gigino-muted grid flex-1 gap-1 text-[10px] font-extrabold tracking-wide uppercase sm:flex-none">
+              Month
+              <select
+                aria-label="Dashboard month"
+                className="border-gigino-line text-gigino-ink focus:border-gigino-tomato min-h-11 min-w-36 rounded-[12px] border bg-white px-3 text-sm font-bold normal-case outline-none focus:ring-4 focus:ring-red-100"
+                value={selectedMonth}
+                onChange={(event) => {
+                  setSelectedMonth(Number(event.target.value));
+                  setPeriod("month");
+                }}
+              >
+                {monthOptions.map((month) => (
+                  <option key={month.value} value={month.value}>
+                    {month.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="text-gigino-muted grid gap-1 text-[10px] font-extrabold tracking-wide uppercase">
+              Year
+              <select
+                aria-label="Dashboard year"
+                className="border-gigino-line text-gigino-ink focus:border-gigino-tomato min-h-11 rounded-[12px] border bg-white px-3 text-sm font-bold normal-case outline-none focus:ring-4 focus:ring-red-100"
+                value={selectedYear}
+                onChange={(event) => {
+                  setSelectedYear(Number(event.target.value));
+                  if (period !== "year") setPeriod("month");
+                }}
+              >
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <p
+            className={cn(
+              "text-gigino-muted flex min-h-5 items-center gap-1.5 text-xs font-bold",
+              report.isError && "text-red-700",
+            )}
+            aria-live="polite"
+          >
+            <CalendarDays className="size-3.5" />
+            {report.isError
+              ? "Could not load the selected period"
+              : `Viewing ${selectedPeriodLabel}${report.isFetching ? " · Updating…" : ""}`}
+          </p>
         </div>
       </div>
 
