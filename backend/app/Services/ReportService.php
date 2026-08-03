@@ -126,6 +126,34 @@ class ReportService
             ->values()
             ->all();
 
+        $cancelledOrdersQuery = Order::query()
+            ->where('status', OrderStatus::Cancelled->value)
+            ->where('cancelled_at', '>=', $start)
+            ->where('cancelled_at', '<', $end);
+
+        $cancelledOrdersCount = (clone $cancelledOrdersQuery)->count();
+        $cancelledOrderValue = (int) (clone $cancelledOrdersQuery)->sum('total_cents');
+        $cancelledOrders = (clone $cancelledOrdersQuery)
+            ->with([
+                'worker:id,name',
+                'restaurantTable:id,label',
+            ])
+            ->withSum('items as item_units', 'quantity')
+            ->orderByDesc('cancelled_at')
+            ->limit(100)
+            ->get()
+            ->map(fn (Order $order) => [
+                'id' => $order->id,
+                'public_id' => $order->public_id,
+                'table' => $order->restaurantTable->label,
+                'worker' => $order->worker->name,
+                'items_count' => (int) $order->getAttribute('item_units'),
+                'total_cents' => $order->total_cents,
+                'cancelled_at' => $order->cancelled_at->toIso8601String(),
+            ])
+            ->values()
+            ->all();
+
         return [
             'period' => $period,
             'from' => $start->toIso8601String(),
@@ -141,6 +169,9 @@ class ReportService
             'items_sold' => $summary['items_sold'],
             'average_ticket_cents' => $summary['average_ticket_cents'],
             'average_spend_per_visitor_cents' => $summary['average_spend_per_visitor_cents'],
+            'cancelled_orders_count' => $cancelledOrdersCount,
+            'cancelled_order_value_cents' => $cancelledOrderValue,
+            'cancelled_orders' => $cancelledOrders,
             'series' => $this->series($payments, $bucketFormat),
             'payment_methods' => $paymentMethods,
             'workers' => $this->groupPayments($payments, 'order.worker.name'),

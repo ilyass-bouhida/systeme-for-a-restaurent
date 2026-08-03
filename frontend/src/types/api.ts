@@ -195,6 +195,17 @@ export interface ReportData {
   items_sold: number;
   average_ticket_cents: number;
   average_spend_per_visitor_cents: number;
+  cancelled_orders_count: number;
+  cancelled_order_value_cents: number;
+  cancelled_orders: Array<{
+    id: number;
+    public_id: string;
+    table: string;
+    worker: string;
+    items_count: number;
+    total_cents: number;
+    cancelled_at: string;
+  }>;
   series: ReportRow[];
   payment_methods: PaymentMethodSummary[];
   workers: ReportRow[];

@@ -6,6 +6,7 @@ use App\Contracts\CardTerminal;
 use App\Contracts\CashDrawer;
 use App\Contracts\ReceiptPrinter;
 use App\Enums\TableStatus;
+use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Receipt;
 use App\Models\RestaurantSetting;
@@ -168,5 +169,51 @@ class PaymentAndReportsTest extends TestCase
         $this->getJson('/api/admin/reports?period=month&year=1999&month=13')
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['year', 'month']);
+    }
+
+    public function test_cancelled_orders_are_audited_without_being_counted_as_revenue(): void
+    {
+        $worker = $this->makeWorker();
+        $this->actingAsPos($worker);
+
+        [, $product] = $this->makeProduct(7500, 2000);
+        $table = $this->makeTable();
+        $orderId = $this->postJson("/api/tables/{$table->id}/orders")->json('data.id');
+
+        $this->postJson("/api/orders/{$orderId}/items", [
+            'product_id' => $product->id,
+            'quantity' => 2,
+        ])->assertOk();
+
+        $this->postJson("/api/orders/{$orderId}/cancel")
+            ->assertOk()
+            ->assertJsonPath('data.status', 'cancelled');
+
+        Order::query()->findOrFail($orderId)->update([
+            'cancelled_at' => '2025-05-15 12:00:00',
+        ]);
+
+        $this->actingAsPos($this->makeAdmin());
+
+        $this->getJson('/api/admin/reports?period=month&year=2025&month=5')
+            ->assertOk()
+            ->assertJsonPath('data.total_revenue_cents', 0)
+            ->assertJsonPath('data.total_cost_cents', 0)
+            ->assertJsonPath('data.gross_profit_cents', 0)
+            ->assertJsonPath('data.orders_count', 0)
+            ->assertJsonPath('data.items_sold', 0)
+            ->assertJsonPath('data.cancelled_orders_count', 1)
+            ->assertJsonPath('data.cancelled_order_value_cents', 15000)
+            ->assertJsonPath('data.cancelled_orders.0.id', $orderId)
+            ->assertJsonPath('data.cancelled_orders.0.table', $table->label)
+            ->assertJsonPath('data.cancelled_orders.0.worker', $worker->name)
+            ->assertJsonPath('data.cancelled_orders.0.items_count', 2)
+            ->assertJsonPath('data.cancelled_orders.0.total_cents', 15000);
+
+        $this->getJson('/api/admin/reports?period=month&year=2025&month=6')
+            ->assertOk()
+            ->assertJsonPath('data.cancelled_orders_count', 0)
+            ->assertJsonPath('data.cancelled_order_value_cents', 0)
+            ->assertJsonCount(0, 'data.cancelled_orders');
     }
 }

@@ -4,10 +4,12 @@ import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { useReport } from "@/features/admin/admin-queries";
 import type { ReportData } from "@/types/api";
 import { cn } from "@/utils/cn";
+import { formatDateTime } from "@/utils/dates";
 import { formatMoney } from "@/utils/money";
 import {
   Banknote,
   BarChart3,
+  CircleX,
   Coins,
   PackageCheck,
   Percent,
@@ -53,7 +55,8 @@ export function ReportsPage() {
             Complete performance
           </h1>
           <p className="mt-2 text-stone-500">
-            Revenue, costs, profit, visitors, products, workers, and payments.
+            Revenue, costs, profit, visitors, products, workers, payments, and
+            cancellations.
           </p>
         </div>
         <div className="flex rounded-2xl border border-stone-200 bg-white p-1">
@@ -72,7 +75,7 @@ export function ReportsPage() {
         </div>
       </div>
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Metric
           label="Revenue"
           value={formatMoney(data.total_revenue_cents)}
@@ -108,6 +111,18 @@ export function ReportsPage() {
           value={data.items_sold}
           detail="Product units completed"
           icon={<PackageCheck className="size-5 text-rose-600" />}
+        />
+        <Metric
+          label="Cancelled orders"
+          value={data.cancelled_orders_count}
+          detail="Excluded from revenue"
+          icon={<CircleX className="size-5 text-red-600" />}
+        />
+        <Metric
+          label="Cancelled value"
+          value={formatMoney(data.cancelled_order_value_cents)}
+          detail="Original value before cancellation"
+          icon={<ReceiptText className="size-5 text-orange-600" />}
         />
       </div>
 
@@ -229,6 +244,71 @@ export function ReportsPage() {
           </div>
         </Card>
       </div>
+
+      <Card className="mt-4 overflow-hidden">
+        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-stone-100 p-5 sm:p-6">
+          <div className="flex items-start gap-3">
+            <div className="grid size-10 shrink-0 place-items-center rounded-2xl bg-red-50">
+              <CircleX className="size-5 text-red-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black">Cancelled orders</h2>
+              <p className="mt-1 text-sm text-stone-500">
+                Audit history kept separate from revenue, costs, and profit.
+              </p>
+            </div>
+          </div>
+          <Badge tone="red">{data.cancelled_orders_count} cancelled</Badge>
+        </div>
+
+        {data.cancelled_orders.length === 0 ? (
+          <div className="px-5 py-12 text-center sm:px-6">
+            <CircleX className="mx-auto size-8 text-stone-300" />
+            <p className="mt-3 text-sm font-bold text-stone-500">
+              No cancelled orders in this period.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left text-sm">
+              <thead className="bg-stone-50 text-xs font-black tracking-wide text-stone-500 uppercase">
+                <tr>
+                  <th className="px-5 py-3 sm:px-6">Order</th>
+                  <th className="px-5 py-3">Table</th>
+                  <th className="px-5 py-3">Worker</th>
+                  <th className="px-5 py-3 text-center">Items</th>
+                  <th className="px-5 py-3">Cancelled at</th>
+                  <th className="px-5 py-3 text-right sm:px-6">
+                    Cancelled value
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-100">
+                {data.cancelled_orders.map((order) => (
+                  <tr key={order.id} className="hover:bg-stone-50/70">
+                    <td className="px-5 py-4 font-black sm:px-6">
+                      #{order.public_id.slice(0, 8).toUpperCase()}
+                    </td>
+                    <td className="px-5 py-4 font-bold text-stone-700">
+                      {order.table}
+                    </td>
+                    <td className="px-5 py-4 text-stone-600">{order.worker}</td>
+                    <td className="px-5 py-4 text-center font-bold">
+                      {order.items_count}
+                    </td>
+                    <td className="px-5 py-4 text-stone-500">
+                      {formatDateTime(order.cancelled_at)}
+                    </td>
+                    <td className="px-5 py-4 text-right font-black text-red-700 sm:px-6">
+                      {formatMoney(order.total_cents)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
         <Ranking title="Worker performance" rows={data.workers} />
