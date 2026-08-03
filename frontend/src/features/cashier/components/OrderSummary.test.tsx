@@ -14,6 +14,7 @@ const order: Order = {
   notes: null,
   held_at: null,
   paid_at: null,
+  cancelled_at: null,
   created_at: "2026-07-31T12:00:00Z",
   table: { id: 1, label: "Table 1", status: "occupied" },
   worker: { id: 2, name: "Sara" },

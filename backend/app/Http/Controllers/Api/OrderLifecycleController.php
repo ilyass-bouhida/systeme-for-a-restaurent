@@ -21,4 +21,9 @@ class OrderLifecycleController extends Controller
     {
         return new OrderResource($this->orders->resume($order, $request->user()));
     }
+
+    public function cancel(Order $order, Request $request): OrderResource
+    {
+        return new OrderResource($this->orders->cancel($order, $request->user()));
+    }
 }

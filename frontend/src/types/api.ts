@@ -115,6 +115,7 @@ export interface Order {
   notes: string | null;
   held_at: string | null;
   paid_at: string | null;
+  cancelled_at: string | null;
   created_at: string;
   table: Pick<RestaurantTable, "id" | "label" | "status">;
   worker: Pick<User, "id" | "name">;

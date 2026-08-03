@@ -1,5 +1,6 @@
 import {
   addOrderItem,
+  cancelOrder,
   getMenu,
   getOrder,
   getOrders,
@@ -79,6 +80,7 @@ function useOrderMutation<TVariables>(
   mutationFn: (
     variables: TVariables,
   ) => Promise<Awaited<ReturnType<typeof getOrder>>>,
+  successMessage?: string,
 ) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -87,6 +89,7 @@ function useOrderMutation<TVariables>(
       queryClient.setQueryData(cashierKeys.order(order.id), order);
       queryClient.invalidateQueries({ queryKey: cashierKeys.tables });
       queryClient.invalidateQueries({ queryKey: ["orders", "list"] });
+      if (successMessage) toast.success(successMessage);
     },
     onError: (error) => toast.error(getErrorMessage(error)),
   });
@@ -133,6 +136,13 @@ export function useHoldOrder() {
 
 export function useResumeOrder() {
   return useOrderMutation((orderId: number) => resumeOrder(orderId));
+}
+
+export function useCancelOrder() {
+  return useOrderMutation(
+    (orderId: number) => cancelOrder(orderId),
+    "Order cancelled. The table is available again.",
+  );
 }
 
 export function usePayOrder() {

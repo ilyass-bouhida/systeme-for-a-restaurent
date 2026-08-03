@@ -26,6 +26,7 @@ All successful endpoints return JSON. Validation failures use Laravel's standard
 - `DELETE /api/orders/{order}/items/{item}`
 - `POST /api/orders/{order}/hold`
 - `POST /api/orders/{order}/resume`
+- `POST /api/orders/{order}/cancel`
 - `POST /api/orders/{order}/pay`
 - `GET /api/receipts/{receipt}`
 - `POST /api/receipts/{receipt}/print`

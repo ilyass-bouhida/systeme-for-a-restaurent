@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'active', 'throttle:api'])->group(function ()
         Route::delete('orders/{order}/items/{item}', [OrderItemController::class, 'destroy']);
         Route::post('orders/{order}/hold', [OrderLifecycleController::class, 'hold']);
         Route::post('orders/{order}/resume', [OrderLifecycleController::class, 'resume']);
+        Route::post('orders/{order}/cancel', [OrderLifecycleController::class, 'cancel']);
     });
 
     Route::post('orders/{order}/pay', [PaymentController::class, 'store'])

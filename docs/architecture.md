@@ -181,10 +181,12 @@ is a convenience only; every permission is enforced again by Laravel.
 3. Select a table and start or resume its open order.
 4. Add categorized products and adjust quantities.
 5. Hold the order, or select cash/card and complete payment.
-6. Cash payment calculates change, stores the receipt, prints, and asks the
+6. Cancel an open or held order when needed; the order stays in history and the
+   table returns to available without creating revenue.
+7. Cash payment calculates change, stores the receipt, prints, and asks the
    drawer adapter to open.
-7. Card payment completes only after the terminal adapter succeeds.
-8. Return to the table grid or reprint a receipt from Orders.
+8. Card payment completes only after the terminal adapter succeeds.
+9. Return to the table grid or reprint a receipt from Orders.
 
 ### Admin
 

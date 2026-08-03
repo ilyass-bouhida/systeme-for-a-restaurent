@@ -1,11 +1,13 @@
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { Modal } from "@/components/ui/Modal";
 import { OrderSummary } from "@/features/cashier/components/OrderSummary";
 import { ProductCard } from "@/features/cashier/components/ProductCard";
 import { ReceiptModal } from "@/features/cashier/components/ReceiptModal";
 import {
   useAddOrderItem,
+  useCancelOrder,
   useHoldOrder,
   useMenu,
   useOrder,
@@ -19,7 +21,9 @@ import type { PaymentMethod, Receipt } from "@/types/api";
 import { cn } from "@/utils/cn";
 import { dirhamsToCents } from "@/utils/money";
 import {
+  AlertTriangle,
   ArrowLeft,
+  CircleX,
   Minus,
   PauseCircle,
   Play,
@@ -43,10 +47,12 @@ export function OrderPage() {
   const hold = useHoldOrder();
   const resume = useResumeOrder();
   const pay = usePayOrder();
+  const cancel = useCancelOrder();
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [productSearch, setProductSearch] = useState("");
   const [paidAmount, setPaidAmount] = useState("");
   const [receipt, setReceipt] = useState<Receipt | null>(null);
+  const [cancelConfirmationOpen, setCancelConfirmationOpen] = useState(false);
 
   if (order.isLoading || menu.isLoading) {
     return <LoadingScreen label="Preparing this order…" />;
@@ -78,6 +84,8 @@ export function OrderPage() {
     : categoryProducts;
   const isHeld = currentOrder.status === "held";
   const isPaid = currentOrder.status === "paid";
+  const isCancelled = currentOrder.status === "cancelled";
+  const isClosed = isPaid || isCancelled;
   const busy =
     addItem.isPending ||
     updateItem.isPending ||
@@ -85,6 +93,7 @@ export function OrderPage() {
     removeItem.isPending ||
     hold.isPending ||
     resume.isPending ||
+    cancel.isPending ||
     pay.isPending;
 
   const completePayment = (method: PaymentMethod) => {
@@ -114,33 +123,57 @@ export function OrderPage() {
               <h1 className="text-3xl font-black tracking-[-0.04em]">
                 {currentOrder.table.label}
               </h1>
-              <Badge tone={isHeld ? "red" : isPaid ? "green" : "amber"}>
-                {isHeld ? "On hold" : isPaid ? "Paid" : "In service"}
+              <Badge
+                tone={
+                  isHeld || isCancelled ? "red" : isPaid ? "green" : "amber"
+                }
+              >
+                {isHeld
+                  ? "On hold"
+                  : isPaid
+                    ? "Paid"
+                    : isCancelled
+                      ? "Cancelled"
+                      : "In service"}
               </Badge>
             </div>
             <p className="text-gigino-muted mt-1 text-xs font-semibold">
-              Active order · #{currentOrder.public_id.slice(0, 8).toUpperCase()}
+              Order · #{currentOrder.public_id.slice(0, 8).toUpperCase()}
             </p>
           </div>
         </div>
-        {isHeld && (
-          <Button
-            variant="danger"
-            size="lg"
-            icon={<Play className="size-5" />}
-            disabled={resume.isPending}
-            onClick={() => resume.mutate(orderId)}
-          >
-            Resume order
-          </Button>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {!isClosed && (
+            <Button
+              variant="danger"
+              size="lg"
+              icon={<CircleX className="size-5" />}
+              disabled={busy}
+              onClick={() => setCancelConfirmationOpen(true)}
+            >
+              Cancel order
+            </Button>
+          )}
+          {isHeld && (
+            <Button
+              size="lg"
+              icon={<Play className="size-5" />}
+              disabled={busy}
+              onClick={() => resume.mutate(orderId)}
+            >
+              Resume order
+            </Button>
+          )}
+        </div>
         <div className="border-gigino-line flex min-h-12 items-center gap-2 rounded-[var(--gigino-radius-md)] border bg-white px-2">
           <Users className="text-gigino-muted ml-1 size-4" />
           <span className="text-gigino-muted text-xs font-bold">Guests</span>
           <button
             type="button"
             className="bg-gigino-subtle grid size-9 place-items-center rounded-xl disabled:opacity-40"
-            disabled={busy || isHeld || isPaid || currentOrder.guest_count <= 1}
+            disabled={
+              busy || isHeld || isClosed || currentOrder.guest_count <= 1
+            }
             aria-label="Remove one guest"
             onClick={() =>
               updateGuests.mutate({
@@ -158,7 +191,7 @@ export function OrderPage() {
             type="button"
             className="bg-gigino-ink grid size-9 place-items-center rounded-xl text-white disabled:opacity-40"
             disabled={
-              busy || isHeld || isPaid || currentOrder.guest_count >= 50
+              busy || isHeld || isClosed || currentOrder.guest_count >= 50
             }
             aria-label="Add one guest"
             onClick={() =>
@@ -239,7 +272,7 @@ export function OrderPage() {
               <ProductCard
                 key={product.id}
                 product={product}
-                disabled={busy || isHeld || isPaid}
+                disabled={busy || isHeld || isClosed}
                 onAdd={() => addItem.mutate({ orderId, productId: product.id })}
               />
             ))}
@@ -260,7 +293,7 @@ export function OrderPage() {
           order={currentOrder}
           paidAmount={paidAmount}
           onPaidAmountChange={setPaidAmount}
-          readOnly={isHeld || isPaid}
+          readOnly={isHeld || isClosed}
           busy={busy}
           onQuantityChange={(itemId, quantity) =>
             updateItem.mutate({ orderId, itemId, quantity })
@@ -282,6 +315,54 @@ export function OrderPage() {
           navigate("/cashier/tables");
         }}
       />
+
+      <Modal
+        open={cancelConfirmationOpen}
+        onClose={() => {
+          if (!cancel.isPending) setCancelConfirmationOpen(false);
+        }}
+        title="Cancel this order?"
+        className="max-w-md"
+      >
+        <div className="flex gap-3 rounded-2xl bg-red-50 p-4 text-red-800 ring-1 ring-red-200">
+          <AlertTriangle className="mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="font-extrabold">
+              {currentOrder.table.label} will become available immediately.
+            </p>
+            <p className="mt-1 text-sm leading-6">
+              This order will be kept in history as cancelled and will not count
+              as a sale.
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+          <Button
+            variant="secondary"
+            size="lg"
+            disabled={cancel.isPending}
+            onClick={() => setCancelConfirmationOpen(false)}
+          >
+            Keep order
+          </Button>
+          <Button
+            variant="danger"
+            size="lg"
+            icon={<CircleX className="size-5" />}
+            disabled={cancel.isPending}
+            onClick={() =>
+              cancel.mutate(orderId, {
+                onSuccess: () => {
+                  setCancelConfirmationOpen(false);
+                  navigate("/cashier/tables", { replace: true });
+                },
+              })
+            }
+          >
+            {cancel.isPending ? "Cancelling…" : "Cancel order"}
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

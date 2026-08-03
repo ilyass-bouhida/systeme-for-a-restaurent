@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'held_at' => $this->held_at?->toIso8601String(),
             'paid_at' => $this->paid_at?->toIso8601String(),
+            'cancelled_at' => $this->cancelled_at?->toIso8601String(),
             'created_at' => $this->created_at->toIso8601String(),
             'table' => $this->whenLoaded('restaurantTable', fn () => [
                 'id' => $this->restaurantTable->id,

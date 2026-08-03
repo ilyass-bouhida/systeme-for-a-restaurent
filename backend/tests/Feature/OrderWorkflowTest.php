@@ -68,4 +68,34 @@ class OrderWorkflowTest extends TestCase
 
         $this->assertSame($first, $second);
     }
+
+    public function test_worker_can_cancel_an_order_and_release_the_table(): void
+    {
+        $table = $this->makeTable();
+        $orderId = $this->postJson("/api/tables/{$table->id}/orders")
+            ->assertCreated()
+            ->json('data.id');
+
+        $this->postJson("/api/orders/{$orderId}/cancel")
+            ->assertOk()
+            ->assertJsonPath('data.status', OrderStatus::Cancelled->value)
+            ->assertJsonPath('data.table.status', TableStatus::Available->value)
+            ->assertJsonPath('data.cancelled_at', fn ($value) => is_string($value));
+
+        $this->assertDatabaseHas('activity_logs', [
+            'action' => 'order.cancelled',
+            'subject_id' => $orderId,
+        ]);
+        $this->assertSame(TableStatus::Available, $table->refresh()->status);
+
+        $this->postJson("/api/orders/{$orderId}/cancel")
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('order');
+
+        $newOrderId = $this->postJson("/api/tables/{$table->id}/orders")
+            ->assertCreated()
+            ->json('data.id');
+
+        $this->assertNotSame($orderId, $newOrderId);
+    }
 }

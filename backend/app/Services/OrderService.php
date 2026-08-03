@@ -189,6 +189,31 @@ class OrderService
         return $updated;
     }
 
+    public function cancel(Order $order, User $worker): Order
+    {
+        $cancelled = DB::transaction(function () use ($order, $worker): Order {
+            /** @var Order $lockedOrder */
+            $lockedOrder = Order::query()->lockForUpdate()->findOrFail($order->id);
+            $this->ensureMutable($lockedOrder);
+
+            $lockedOrder->update([
+                'status' => OrderStatus::Cancelled,
+                'held_at' => null,
+                'cancelled_at' => now(),
+            ]);
+            $lockedOrder->restaurantTable()->update([
+                'status' => TableStatus::Available,
+            ]);
+            $this->activity->record($worker, 'order.cancelled', $lockedOrder);
+
+            return $lockedOrder->fresh(['items.product', 'worker', 'restaurantTable']);
+        });
+
+        TableStatusChanged::dispatch($cancelled->restaurantTable);
+
+        return $cancelled;
+    }
+
     public function updateGuestCount(Order $order, int $guestCount, User $worker): Order
     {
         $this->ensureMutable($order);

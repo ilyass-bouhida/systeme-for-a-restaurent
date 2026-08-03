@@ -89,6 +89,11 @@ export async function resumeOrder(orderId: number): Promise<Order> {
     .data;
 }
 
+export async function cancelOrder(orderId: number): Promise<Order> {
+  return (await api.post<ApiResource<Order>>(`/orders/${orderId}/cancel`)).data
+    .data;
+}
+
 export async function payOrder(
   orderId: number,
   method: "cash" | "card",
